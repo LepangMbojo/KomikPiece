@@ -21,16 +21,16 @@
 ## 🛠️ Instalasi
 
 ### 1. Clone Repository 
-git clone https://github.com/LepangMbojo/KomikPiece.git
+-git clone https://github.com/LepangMbojo/KomikPiece.git
 
 ### 2. instal dependency
-composer install
-npm install
-npm run dev
+-composer install
+-npm install
+-npm run dev
 
 ### 3. Konfigurasi .env
-cp .env.example .env
-php artisan key:generate
+-cp .env.example .env
+-php artisan key:generate
 
 ### 4. Migrasi dan seed
-php artisan migrate:fresh --seed
+-php artisan migrate:fresh --seed
