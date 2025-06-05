@@ -73,7 +73,7 @@ class AdminController extends Controller
             \DB::beginTransaction();
 
             // Upload cover
-           $coverPath = $request->file('cover')->store('comics/covers', 'public');
+           $coverPath = $request->file('cover')->store('covers', 'public');
 
         // Buat komik
         $comic = Komik::create([
@@ -99,7 +99,7 @@ class AdminController extends Controller
             $chapterPages = [];
             if ($request->hasFile('chapter_pages')) {
                 foreach ($request->file('chapter_pages') as $index => $page) {
-                    $pagePath = $page->store("comics/{$comic->id}/chapters/{$request->chapter_number}", 'public');
+                    $pagePath = $page->store("chapters/{$comic->id}/{$request->chapter_number}", 'public');
                     $chapterPages[] = $pagePath;
                 }
             }
@@ -190,7 +190,7 @@ class AdminController extends Controller
                 Storage::disk('public')->delete($comic->cover);
             }
             
-            $updateData['cover'] = $request->file('cover')->store('comics/covers', 'public');
+            $updateData['cover'] = $request->file('cover')->store('covers', 'public');
         }
 
         $comic->update($updateData);
@@ -222,7 +222,7 @@ class AdminController extends Controller
             }
 
             // Hapus folder komik
-            Storage::disk('public')->deleteDirectory("comics/{$comic->id}");
+           Storage::disk('public')->deleteDirectory("chapters/{$comic->id}");
 
             // Hapus dari database
             $comic->delete();
@@ -262,7 +262,7 @@ class AdminController extends Controller
             $chapterPages = [];
             if ($request->hasFile('chapter_pages')) {
                 foreach ($request->file('chapter_pages') as $index => $page) {
-                    $pagePath = $page->store("comics/{$comicId}/chapters/{$request->chapter_number}", 'public');
+                    $pagePath = $page->store("chapters/{$comicId}/{$request->chapter_number}", 'public');
                     $chapterPages[] = $pagePath;
                 }
             }
@@ -313,7 +313,7 @@ class AdminController extends Controller
             }
 
             // Hapus folder chapter
-            Storage::disk('public')->deleteDirectory("comics/{$comicId}/chapters/{$chapter->chapter_number}");
+            Storage::disk('public')->deleteDirectory("chapters/{$comicId}/{$chapter->chapter_number}");
 
             $chapter->delete();
 

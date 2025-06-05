@@ -7,6 +7,10 @@ use App\Models\Genre;
 use App\Models\Chapter;
 use App\Models\Comments;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage; 
+
+
 class KomikController extends Controller
 {
     public function index()
@@ -30,25 +34,36 @@ class KomikController extends Controller
     }
 
     public function show($id)
-{
-    $komik = KomikIndex::with('chapters')->findOrFail($id);
-    
-    // Debug: Periksa data comic
-    \Log::info('Comic data:', [
-        'id' => $komik->id,
-        'judul' => $komik->judul,
-        'cover' => $komik->cover,
-        'genre' => $komik->genre, // Tambahkan ini untuk debug
-        'cover_exists' => \Storage::disk('public')->exists($komik->cover ?? '')
-    ]);
+    {
+        try {
+            $komik = KomikIndex::with(['chapters', 'comments.user'])->findOrFail($id);
 
-    $relatedComics = KomikIndex::where('genre', $komik->genre)
-                        ->where('id', '!=', $komik->id)
-                        ->take(6)
-                        ->get();
+            // Debug log
+            Log::info('Comic data: ', [ // Sekarang Log akan dikenali
+                'id' => $komik->id,
+                'judul' => $komik->judul,
+                'cover' => $komik->cover,
+                'cover_image' => $komik->cover_image, // Pastikan properti ini ada di model KomikIndex
+                'cover_exists' => $komik->cover_exists, // Pastikan properti ini ada di model KomikIndex
+                'storage_files' => Storage::disk('public')->files('covers') // Storage juga akan dikenali
+            ]);
 
-    return view('komik.show', compact('komik', 'relatedComics'));
-}
+            // Increment views
+            $komik->increment('views');
+
+            // Get related komiks
+            $relatedkomiks = KomikIndex::where('id', '!=', $id)
+                                      ->limit(6)
+                                      ->get();
+
+            return view('komik.show', compact('komik', 'relatedkomiks'));
+
+        } catch (\Exception $e) {
+            Log::error('Comic show error: ' . $e->getMessage()); // Log akan dikenali
+            return redirect()->route('komik.index')->with('error', 'Comic not found');
+        }
+    }
+
 
     public function search(Request $request)
     {
@@ -81,33 +96,42 @@ class KomikController extends Controller
         'content' => 'required|string|min:3|max:1000'
     ]);
 
-    $comic = KomikIndex::findOrFail($id);
+    $komik = KomikIndex::findOrFail($id);
 
     Comments::create([
         'user_id' => auth()->id(),
-        'komik_id' => $comic->id,
+        'komik_id' => $komik->id,
         'content' => $request->content
     ]);
 
     return back()->with('success', 'Comment posted successfully!');
 }
 
-   public function showChapter($id, $chapter)
-{
-    \Log::info('Chapter request:', [
-        'komik_id' => $id,
-        'chapter_number' => $chapter,
-        'url' => request()->url(),
-        'referer' => request()->header('referer')
-    ]);
-    
-    $komik = KomikIndex::with('chapters')->findOrFail($id);
-    $currentChapter = $komik->chapters()
-                           ->where('chapter_number', $chapter)
-                           ->firstOrFail();
-    
-    $chapter = $currentChapter;
-    return view('komik.chapter', compact('komik', 'chapter'));
+  public function showChapter($id, $chapterNumber)
+    {
+        try {
+            $komik = KomikIndex::findOrFail($id);
+            $chapter = Chapter::where('komik_id', $id)
+                              ->where('chapter_number', $chapterNumber)
+                              ->firstOrFail();
 
-}
+            // Debug log
+            Log::info('Chapter data: ', [ // Log akan dikenali
+                'komik_id' => $komik->id,
+                'chapter_id' => $chapter->id,
+                'pages' => $chapter->pages,
+                'pages_url' => $chapter->pages_url, // Pastikan properti ini ada
+                'storage_files' => Storage::disk('public')->files('chapters/' . $id . '/' . $chapterNumber) // Storage akan dikenali
+            ]);
+
+            $chapter->increment('views');
+
+            return view('komik.chapter', compact('komik', 'chapter'));
+
+        } catch (\Exception $e) {
+            Log::error('Chapter error: ' . $e->getMessage()); // Log akan dikenali
+            return redirect()->route('komik.show', $id)->with('error', 'Chapter not found');
+        }
+    }
+
 }

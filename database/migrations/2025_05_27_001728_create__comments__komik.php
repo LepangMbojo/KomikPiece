@@ -6,24 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
+    public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
             $table->unsignedBigInteger('komik_id');
+            $table->unsignedBigInteger('user_id');
             $table->text('content');
             $table->timestamps();
-            
-            // Buat foreign key yang mereferensikan tabel komiks
+
             $table->foreign('komik_id')->references('id')->on('komiks')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('comments');
     }

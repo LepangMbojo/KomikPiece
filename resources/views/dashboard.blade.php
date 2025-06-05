@@ -117,7 +117,7 @@
             <div class="comic-grid">
                 @forelse($komiks as $komik)
                     <div class="comic-item" onclick="location.href='{{ url('/komik/' . $komik->id) }}'">
-                        <img src="{{ asset('storage/' . $komik->cover_path) }}" alt="{{ $komik->judul }}" class="comic-cover">
+                     <img src="{{ Storage::url($komik->cover) }}" alt="{{ $komik->judul }}">
                         <div class="comic-info">
                             <h6 class="comic-title">{{ $komik->judul }}</h6>
                             <div class="comic-meta">

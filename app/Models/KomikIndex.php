@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Database\Factories\KomikIndexFactory;
 use App\Models\User;
-use App\Models\Comment;
+use App\Models\Comments;
 use App\Models\Genre;
 
+use Illuminate\Support\Facades\Storage;
 
 class KomikIndex extends Model
 {
@@ -18,15 +19,15 @@ protected $table = 'komiks';
 // app/Models/Komik.php
 
 protected $fillable = [
-    'judul',
-    'slug', 
-        'description',
+        'judul',
+        'cover',
+        'genre',
         'author',
-        'cover_image',
+        'description',
         'status',
         'rating',
         'views'
-];
+    ];
 
     protected $casts = [
         'rating' => 'integer',
@@ -34,6 +35,54 @@ protected $fillable = [
         'Favorite' => 'integer',
         'views' => 'integer'
     ];
+
+    public function getCoverImageAttribute()
+    {
+        // Jika ada cover di database, gunakan itu
+        if ($this->cover) {
+            return Storage::url($this->cover);
+        }
+        
+        // Jika tidak ada, coba cari file berdasarkan nama komik
+        $possibleCovers = [
+            'covers/' . $this->id . '.jpg',
+            'covers/' . $this->id . '.png',
+            'covers/' . $this->id . '.jpeg',
+            'covers/' . str_replace(' ', '_', strtolower($this->judul)) . '.jpg',
+            'covers/' . str_replace(' ', '_', strtolower($this->judul)) . '.png',
+        ];
+        
+        foreach ($possibleCovers as $coverPath) {
+            if (Storage::disk('public')->exists($coverPath)) {
+                return Storage::url($coverPath);
+            }
+        }
+        
+        // Fallback ke placeholder
+        return '/placeholder.svg?height=350&width=250&text=' . urlencode($this->judul);
+    }
+
+    // Cek apakah cover exists
+    public function getCoverExistsAttribute()
+    {
+        if ($this->cover && Storage::disk('public')->exists($this->cover)) {
+            return true;
+        }
+        
+        $possibleCovers = [
+            'covers/' . $this->id . '.jpg',
+            'covers/' . $this->id . '.png',
+            'covers/' . $this->id . '.jpeg',
+        ];
+        
+        foreach ($possibleCovers as $coverPath) {
+            if (Storage::disk('public')->exists($coverPath)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     // Relasi dengan chapters
     public function chapters()
@@ -51,9 +100,9 @@ protected $fillable = [
     }
 
    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'komik_id');
-    }
+{
+    return $this->hasMany(Comments::class, 'komik_id')->latest();
+}
      public function genres()
     {
         return $this->belongsToMany(

@@ -48,10 +48,11 @@
             <div class="comic-grid">
                @forelse($komiks as $comic)
     <div class="comic-item" onclick="location.href='{{ url('/komik/' . $comic->id) }}'">
-        <img src="{{ asset('storage/' . $comic->cover) }}" 
+        <img src="{{ Storage::url($comic->cover) }}"  
              alt="{{ $comic->judul }}" 
              class="comic-cover">
-        
+        <pre>{{ $comic->cover }}</pre>
+
         <div class="comic-info">
             <h6 class="comic-title">{{ $comic->judul }}</h6>
             <div class="comic-meta">
@@ -84,6 +85,8 @@
         </div>
     </div>
 
+
+    
     <script>
         // Sample comic data
     

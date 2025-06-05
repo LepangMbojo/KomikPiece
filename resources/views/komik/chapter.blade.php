@@ -92,33 +92,24 @@
 
             <!-- Chapter Images -->
             <div class="chapter-images">
-                @if($chapter->images)
-                    @php
-                        $images = is_string($chapter->images) ? json_decode($chapter->images, true) : $chapter->images;
-                    @endphp
-                    @if($images && is_array($images) && count($images) > 0)
-                        @foreach($images as $image)
-                            <div class="chapter-image mb-3 text-center">
-                                <img src="{{ Storage::url($image) }}" 
-                                     alt="Chapter {{ $chapter->chapter_number }} - Page {{ $loop->iteration }}" 
-                                     class="img-fluid chapter-page"
-                                     loading="lazy"
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                <div class="image-error" style="display: none;">
-                                    <div class="alert alert-warning">
-                                        <i class="bi bi-exclamation-triangle"></i>
-                                        Image failed to load: Page {{ $loop->iteration }}
-                                    </div>
+                {{-- Gunakan accessor pages_url dari model Chapter --}}
+                @if($chapter->pages_url && count($chapter->pages_url) > 0)
+                    @foreach($chapter->pages_url as $page_url)
+                        <div class="chapter-image mb-3 text-center">
+                            {{-- $page_url sudah berisi URL yang siap pakai atau URL placeholder dari accessor --}}
+                            <img src="{{ $page_url }}"
+                                 alt="Page {{ $loop->iteration }}"
+                                 class="img-fluid chapter-page"
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.src='{{ asset('/placeholder.svg?height=800&width=600&text=Error+Loading+Page') }}'; this.nextElementSibling.style.display='block';">
+                            <div class="image-error" style="display: none;">
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                    Image failed to load: Page {{ $loop->iteration }}
                                 </div>
                             </div>
-                        @endforeach
-                    @else
-                        <div class="text-center py-5">
-                            <i class="bi bi-image display-1 text-muted"></i>
-                            <h5 class="mt-3 text-muted">No images available</h5>
-                            <p class="text-muted">This chapter doesn't have any images yet.</p>
                         </div>
-                    @endif
+                    @endforeach
                 @else
                     <div class="text-center py-5">
                         <i class="bi bi-image display-1 text-muted"></i>
@@ -219,17 +210,24 @@
         }
 
         .chapter-page {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
+        display: block; /* Pastikan gambar adalah elemen block */
+        width: 100%;    /* Buat gambar selalu memenuhi lebar kontainer .chapter-image */
+                       /* Jika Anda lebih suka gambar tidak meregang jika aslinya kecil, 
+                          gunakan max-width: 100%; seperti yang sudah ada */
+        height: auto;   /* Pertahankan rasio aspek gambar */
+        margin-left: auto;  /* Tengahkan gambar jika display block */
+        margin-right: auto; /* Tengahkan gambar jika display block */
+        
+        /* Gaya Anda yang sudah ada */
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+        cursor: pointer;
+    }
 
-        .chapter-page:hover {
+        /* .chapter-page:hover {
             transform: scale(1.02);
-        }
+        } */
 
         .chapter-navigation {
             background-color: var(--card-bg);

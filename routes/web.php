@@ -78,4 +78,10 @@ Route::post('/komik/{komik}/comments', [CommentController::class, 'store'])
 
 Route::get('/komik/{komik}/comments/load-more', [CommentController::class, 'loadMore'])
     ->name('komik.comments.load-more');
+
+Route::post('/comics/{comic}/comments', [CommentController::class, 'store'])->name('comics.comments.store');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/komik/{comic}/comments', [CommentController::class, 'store'])->name('comics.comments.store');
+});
 require __DIR__.'/auth.php';

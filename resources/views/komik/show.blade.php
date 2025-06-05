@@ -17,7 +17,7 @@
         <div class="section-container">
             <div class="row">
                 <div class="col-md-3 text-center mb-4">
-                    <img src="{{ $komik->cover_image }}" alt="{{ $komik->title }}" class="komik-cover img-fluid rounded shadow">
+                   <img src="{{ $komik->cover_image }}" alt="{{ $komik->title }}" class="comic-cover img-fluid rounded shadow">
                     <div class="mt-3">
                         <button class="btn btn-primary w-100 mb-2" onclick="toggleBookmark()">
                             <i class="bi bi-bookmark me-2"></i>
@@ -53,7 +53,7 @@
         <span class="meta-value">
             @if($komik->genre)
                 <!-- Jika genre adalah string tunggal -->
-                <span class="badge bg-dark">{{ $komik->genre }}</span>
+                <span class="badge bg-primary">{{ $komik->genre }}</span>
                 
                 <!-- ATAU jika genre adalah string dengan koma sebagai pemisah -->
                 <!-- 
@@ -193,7 +193,7 @@
 
 
 <!-- Related Comics -->
-@if($relatedComics->count() > 0)
+@if($relatedkomiks->count() > 0)
     <div class="section-container">
         <div class="section-header">
             <i class="bi bi-collection"></i>
@@ -201,9 +201,9 @@
         </div>
 
         <div class="comic-grid">
-            @foreach($relatedComics as $related)
+            @foreach($relatedkomiks as $related)
                 <div class="comic-item" onclick="location.href='{{ route('komik.show', $related->id) }}'">
-                    <img src="{{ asset('storage/' . $related->cover) }}" 
+                   <img src="{{ $komik->cover_image }}" alt="{{ $komik->title }}" class="comic-cover img-fluid rounded shadow"
                          alt="{{ $related->judul }}" 
                          class="comic-cover">
                     <div class="comic-info">
