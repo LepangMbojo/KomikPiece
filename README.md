@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
@@ -63,3 +64,41 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 =======
 # KomikPiece
 >>>>>>> 95b7993854e92e23ac5141330e5348cc5a08d42e
+=======
+# 📚 KomikKu — Website Baca Komik Laravel
+
+**KomikPiece** adalah aplikasi web berbasis Laravel yang memungkinkan pengguna untuk melihat, mencari, dan membaca komik. Pengguna dapat melakukan registrasi, login, mengakses dashboard pribadi, dan melihat populer komik.
+
+---
+
+## 🚀 Fitur Utama
+
+- 🔍 Pencarian komik berdasarkan judul
+- 📂 Tampilan daftar komik dengan gambar cover, rating, bahasa, dan chapter
+- 👤 Sistem autentikasi (register, login, logout)
+- 🛡️ Middleware `auth` dan `verified` untuk membatasi akses dashboard
+- 📊 Dashboard dengan:
+  - Status akun
+  - Koleksi komik favorit
+  - Riwayat bacaan
+  - Komik populer
+
+---
+
+## 🛠️ Instalasi
+
+### 1. Clone Repository 
+- git clone https://github.com/LepangMbojo/KomikPiece.git
+
+### 2. instal dependency
+- composer install
+- npm install
+- npm run dev
+
+### 3. Konfigurasi .env
+- cp .env.example .env
+- php artisan key:generate
+
+### 4. Migrasi dan seed
+- php artisan migrate:fresh --seed
+>>>>>>> 5e69704d94449028299d2d6550f05114a9c3cc9e
