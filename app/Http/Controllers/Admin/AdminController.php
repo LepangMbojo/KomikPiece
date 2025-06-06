@@ -141,13 +141,13 @@ class AdminController extends Controller
 
     public function showComic($id)
     {
-        $comic = Komik::with('chapters')->findOrFail($id);
-        return view('admin.comics.show', compact('comic'));
+        $komik = Komik::with('chapters')->findOrFail($id);
+        return view('admin.comics.show', compact('komik'));
     }
 
     public function editComic($id)
     {
-        $comic = Komik::findOrFail($id);
+        $komik = Komik::findOrFail($id);
         $genres = [
             'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
             'Horror', 'Romance', 'Sci-Fi', 'Slice of Life', 'Sports',
@@ -156,12 +156,12 @@ class AdminController extends Controller
         
         $languages = ['Indonesia', 'English', 'Japanese', 'Korean', 'Chinese'];
         
-        return view('admin.comics.edit', compact('comic', 'genres', 'languages'));
+        return view('admin.comics.edit', compact('komik', 'genres', 'languages'));
     }
 
     public function updateComic(Request $request, $id)
     {
-        $comic = Komik::findOrFail($id);
+        $komik = Komik::findOrFail($id);
         
         $request->validate([
             'judul' => 'required|string|max:255|unique:komiks,judul,' . $id,
@@ -186,14 +186,14 @@ class AdminController extends Controller
         // Update cover jika ada file baru
         if ($request->hasFile('cover')) {
             // Hapus cover lama
-            if ($comic->cover && Storage::disk('public')->exists($comic->cover)) {
-                Storage::disk('public')->delete($comic->cover);
+            if ($komik->cover && Storage::disk('public')->exists($komik->cover)) {
+                Storage::disk('public')->delete($komik->cover);
             }
             
             $updateData['cover'] = $request->file('cover')->store('covers', 'public');
         }
 
-        $comic->update($updateData);
+        $komik->update($updateData);
 
         return redirect()->route('admin.comics')->with('success', 'Komik berhasil diupdate!');
     }
@@ -240,16 +240,16 @@ class AdminController extends Controller
     // Chapter Management
     public function addChapter($comicId)
     {
-        $comic = Komik::findOrFail($comicId);
-        $lastChapter = $comic->chapters()->orderBy('chapter_number', 'desc')->first();
+        $komik = Komik::findOrFail($comicId);
+        $lastChapter = $komik->chapters()->orderBy('chapter_number', 'desc')->first();
         $nextChapterNumber = $lastChapter ? $lastChapter->chapter_number + 1 : 1;
         
-        return view('admin.comics.add-chapter', compact('comic', 'nextChapterNumber'));
+        return view('admin.comics.add-chapter', compact('komik', 'nextChapterNumber'));
     }
 
     public function storeChapter(Request $request, $comicId)
     {
-        $comic = Komik::findOrFail($comicId);
+        $komik = Komik::findOrFail($comicId);
         
         $request->validate([
             'chapter_number' => 'required|integer|min:1|unique:chapters,chapter_number,NULL,id,komik_id,' . $comicId,
@@ -277,8 +277,8 @@ class AdminController extends Controller
             ]);
 
             // Update jumlah chapter di komik
-            $comic->update([
-                'chapter' => $comic->chapters()->count()
+            $komik->update([
+                'chapter' => $komik->chapters()->count()
             ]);
 
             return redirect()->route('admin.comics.show', $comicId)->with('success', 'Chapter berhasil ditambahkan!');

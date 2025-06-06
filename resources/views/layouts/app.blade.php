@@ -168,11 +168,16 @@
         }
         
         .comic-cover {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            display: block;
-        }
+    width: 100%;
+    /* HAPUS tinggi yang dipaksakan (height: 280px;) */
+    
+    aspect-ratio: 2 / 3; /* KUNCI UTAMA: Atur rasio aspek wadah agar seperti komik (2 lebar banding 3 tinggi) */
+                         /* Anda bisa coba juga rasio lain seperti 3/4 atau 66/100 jika lebih pas */
+
+    object-fit: cover; /* Tetap gunakan 'cover' agar jika ada sedikit perbedaan, gambar tetap mengisi penuh */
+    display: block;
+    background-color: #1a1a1a;
+}
         
         .comic-info {
             padding: 15px;

@@ -30,7 +30,7 @@ class KomikController extends Controller
         $bookmarkedComics = []; // Komik yang di-bookmark user
         $recentlyRead = []; // Komik yang baru dibaca user
         
-        return view('dashboard', compact('komiks', 'user', 'bookmarkedComics', 'recentlyRead', 'popularComics'));
+        return view('komik.index', compact('komiks', 'user', 'bookmarkedComics', 'recentlyRead', 'popularComics'));
     }
 
     public function show($id)

@@ -13,9 +13,9 @@
             <div class="comic-grid">
                 @forelse($komiks as $komik)
                     <div class="comic-item" onclick="location.href='{{ route('komik.show', $komik->id) }}'">
-                        <img src="{{ getComicCover($komik->cover) }}" 
-                             alt="{{ $komik->judul }}" 
-                             class="comic-cover">
+                        <img src="{{ $komik->cover_image }}" 
+     alt="{{ $komik->judul }}" 
+     class="comic-cover">
                         
                         <div class="comic-info">
                             <h6 class="comic-title">{{ $komik->judul }}</h6>
