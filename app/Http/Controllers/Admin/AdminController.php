@@ -56,7 +56,7 @@ class AdminController extends Controller
         $request->validate([
         'judul' => 'required|string|max:255|unique:komiks,judul',
         'cover' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-        'deskripsi' => 'required|string|min:10',
+        'description' => 'required|string|min:10',
         'author' => 'required|string|max:255',
         'status' => 'required|string|max:50',
         'language' => 'required|string|max:50',
@@ -80,7 +80,7 @@ class AdminController extends Controller
             'judul' => $request->judul,
             'slug' => Str::slug($request->judul),
             'cover' => $coverPath,
-            'deskripsi' => $request->deskripsi,
+            'description' => $request->description,
             'author' => $request->author,
             'status' => $request->status,
             'language' => $request->language,
@@ -166,7 +166,7 @@ class AdminController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255|unique:komiks,judul,' . $id,
             'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            'deskripsi' => 'required|string|min:10',
+            'description' => 'required|string|min:10',
             'author' => 'required|string|max:255',
             'status' => 'required|string|max:50',
             'language' => 'required|string|max:50',
@@ -176,7 +176,7 @@ class AdminController extends Controller
         $updateData = [
             'judul' => $request->judul,
             'slug' => Str::slug($request->judul),
-            'deskripsi' => $request->deskripsi,
+            'description' => $request->description,
             'author' => $request->author,
             'status' => $request->status,
             'language' => $request->language,

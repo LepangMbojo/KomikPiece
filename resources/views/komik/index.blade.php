@@ -1,14 +1,5 @@
 <x-app-layout>
 
-    <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
-            @if(isset($isDashboard) && $isDashboard)
-                <h2 class="h4 mb-0">Dashboard - Selamat Datang, {{ $user->username }}!</h2>
-            @else
-                <h2 class="h4 mb-0">Daftar Komik</h2>
-            @endif
-        </div>
-    </x-slot>
 
     <div class="container py-4">
         @if(isset($isDashboard) && $isDashboard)
@@ -20,7 +11,7 @@
                 </div>
             </div>
         @endif
-
+    
         <!-- Rest of the content sama seperti index.blade.php -->
         <!-- ... -->
 
@@ -33,10 +24,30 @@
                 Popular Now
             </div>
 
-            <div class="comic-grid" id="popularGrid">
-                <!-- Popular comics will be loaded here -->
+    <div class="comic-grid" id="popularGrid">
+        @forelse($popularKomiks as $komik)
+            <a href="{{ route('komik.show', $komik->id) }}" class="comic-item">
+                <img src="{{ $komik->cover_image }}" alt="{{ $komik->judul }}" class="comic-cover">
+                <div class="comic-info">
+                    <div class="comic-title">{{ $komik->judul }}</div>
+                    <div class="comic-meta">
+                        {{-- Kita bisa tampilkan jumlah views atau favorit di sini jika mau --}}
+                        <span><i class="bi bi-eye-fill"></i> {{ $komik->views }}</span>
+                        <span class="ms-2"><i class="bi bi-heart-fill"></i> {{ $komik->favorited_by_users_count }}</span>
+                    </div>
+                </div>
+            </a>
+        @empty
+            {{-- Tampilan ini akan muncul jika tidak ada komik populer --}}
+            <div class="empty-state">
+                <p class="text-muted">Belum ada komik populer saat ini.</p>
+            </div>
+        @endforelse
             </div>
         </div>
+    </div>
+
+
 
         <!-- New Uploads Section with Dark Background -->
         <div class="section-container">
@@ -45,13 +56,15 @@
                 <span>Komik Terbaru</span>
             </div>
 
-            <div class="comic-grid">
+    <div class="comic-grid">
                @forelse($komiks as $comic)
     <div class="comic-item" onclick="location.href='{{ url('/komik/' . $comic->id) }}'">
         <img src="{{ Storage::url($comic->cover) }}"  
              alt="{{ $comic->judul }}" 
              class="comic-cover">
-        <pre>{{ $comic->cover }}</pre>
+        <!-- <pre>{{ $comic->cover }}</pre> -->
+
+        
 
         <div class="comic-info">
             <h6 class="comic-title">{{ $comic->judul }}</h6>
@@ -73,9 +86,11 @@
             </div>
 
             <!-- Pagination -->
-            <div class="d-flex justify-content-center mt-4">
-                {{ $komiks->links() }}
-            </div>
+            @if(!isset($isDashboard) || !$isDashboard)
+    <div class="d-flex justify-content-center mt-4">
+        {{ $komiks->links() }}
+    </div>
+@endif
         </div>
         <!-- Load More -->
         <div class="load-more">

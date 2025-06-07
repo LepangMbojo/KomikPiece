@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('chapter')->nullable();
             $table->string('status')->nullable();
             $table->string('language')->nullable();
-            $table->text('deskripsi')->nullable();
+            $table->text('description')->nullable();
             $table->string('author')->nullable();
             $table->integer('Favorite')->default(0);
             $table->text('comments')->nullable();

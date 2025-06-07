@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\KomikIndex;
+use App\Models\Comment;
 
 
 
@@ -48,11 +49,11 @@ class User extends Authenticatable
     protected $casts = [
     'email_verified_at' => 'datetime',
     'password' => 'hashed',
-];
+    ];
 
-    public function favoriteKomiks()
+    public function favorites()
     {
-        return $this->belongsToMany(KomikIndex::class, 'komik_user', 'komik_fav_id', 'user_id');
+        return $this->belongsToMany(KomikIndex::class, 'komik_user', 'user_id','komik_id' );
     }
 
     public function comments(): HasMany
@@ -62,13 +63,19 @@ class User extends Authenticatable
     }
 
     // Method untuk check apakah user adalah admin
-    public function isAdmin()
+    /**
+     * Check if the user is an admin.
+     *
+     * @return bool
+     */
+    
+    public function isAdmin(): bool
     {
         return $this->role === 'admin';
     }
 
     // Method untuk check apakah user adalah user biasa
-    public function isUser()
+    public function isUser() : bool
     {
         return $this->role === 'user';
     }

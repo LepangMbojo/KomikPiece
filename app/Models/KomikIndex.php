@@ -96,7 +96,7 @@ protected $fillable = [
     }
     public function favoredByUsers()
     {
-        return $this->belongsToMany(User::class, 'komik_user', 'komik_fav_id', 'user_id');
+        return $this->belongsToMany(User::class, 'komik_user', 'komik_id', 'user_id');
     }
 
    public function comments()

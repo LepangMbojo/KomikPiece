@@ -9,32 +9,38 @@ use App\Http\Controllers\Controller;
 
 class GenreController extends Controller
 {
-   use HasFactory;
-
-    protected $fillable = ['name', 'slug', 'description'];
-
-    protected static function boot()
+  /**
+     * Menampilkan halaman daftar semua genre yang tersedia untuk dipilih pengguna.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index()
     {
-        parent::boot();
+        // Mengambil semua genre, diurutkan berdasarkan nama.
+        // withCount('komiks') akan menambahkan properti 'komiks_count' 
+        // pada setiap genre, ini efisien untuk menampilkan jumlah komik.
+        $genres = Genre::withCount('komiks')->orderBy('name', 'asc')->get();
 
-        static::creating(function ($genre) {
-            if (empty($genre->slug)) {
-                $genre->slug = Str::slug($genre->name);
-            }
-        });
+        // Mengembalikan view 'index' yang ada di folder 'genres'.
+        return view('komik.genre', compact('genres'));
     }
 
     /**
-     * Get the komiks for the genre.
+     * Menampilkan daftar komik berdasarkan genre yang dipilih pengguna.
+     * Kita akan menggunakan 'slug' dari genre untuk URL yang lebih baik (SEO-friendly).
+     *
+     * @param  \App\Models\Genre  $genre  // Ini adalah Route-Model Binding
+     * @return \Illuminate\View\View
      */
-    public function komiks()
+    public function show(Genre $genre)
     {
-        // Sesuaikan dengan nama model dan foreign key Anda
-        return $this->belongsToMany(
-            Komik::class,           // Atau KomikIndex::class
-            'komik_genre',          
-            'genre_id',             
-            'komik_id'              // Atau 'komik_index_id'
-        );
+        // Laravel secara otomatis akan menemukan genre berdasarkan slug dari URL.
+        
+        // Mengambil komik-komik yang berhubungan dengan genre ini.
+        // Gunakan paginate() agar halaman tidak berat jika komiknya banyak.
+        $komiks = $genre->komiks()->latest()->paginate(16); // Menampilkan 16 komik per halaman
+
+        // Mengembalikan view 'show' yang ada di folder 'genres'.
+        return view('komik.genre', compact('genre', 'komiks'));
     }
 }

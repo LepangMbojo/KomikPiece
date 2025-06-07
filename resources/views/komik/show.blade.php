@@ -19,10 +19,20 @@
                 <div class="col-md-3 text-center mb-4">
                    <img src="{{ $komik->cover_image }}" alt="{{ $komik->title }}" class="comic-cover img-fluid rounded shadow">
                     <div class="mt-3">
-                        <button class="btn btn-primary w-100 mb-2" onclick="toggleBookmark()">
-                            <i class="bi bi-bookmark me-2"></i>
-                            <span id="bookmark-text">Add to Bookmark</span>
-                        </button>
+                        @auth
+    {{-- Tombol ini sekarang memiliki ID dan atribut data-* untuk dibaca oleh JavaScript --}}
+    <button id="bookmark-btn" 
+            class="btn w-100 mb-2 {{ $isFavorited ? 'btn-danger' : 'btn-outline-danger' }}"
+            data-comic-id="{{ $komik->id }}"
+            data-add-url="{{ route('favorites.add', $komik->id) }}"
+            data-remove-url="{{ route('favorites.remove', $komik->id) }}">
+        
+        <i class="bi {{ $isFavorited ? 'bi-bookmark-fill' : 'bi-bookmark' }} me-2"></i>
+        <span id="bookmark-text">
+            {{ $isFavorited ? 'Remove from Bookmark' : 'Add to Bookmark' }}
+        </span>
+    </button>
+@endauth
                         <button class="btn btn-outline-light w-100" onclick="sharekomik()">
                             <i class="bi bi-share me-2"></i>Share
                         </button>
@@ -109,7 +119,7 @@
                             </div>
                             <div class="col-auto">
                                 <span class="badge bg-warning">
-                                    <i class="bi bi-bookmark me-1"></i>{{ number_format($komik->bookmarks_count) }} Bookmarks
+                                    <i class="bi bi-bookmark me-1"></i>{{ $komik->favoredByUsers()->count() }} Bookmarks
                                 </span>
                             </div>
                             <div class="col-auto">
@@ -192,7 +202,7 @@
         </div>
 
 
-<!-- Related Comics -->
+Related Comics
 @if($relatedkomiks->count() > 0)
     <div class="section-container">
         <div class="section-header">
@@ -444,16 +454,57 @@
 
 <!-- SCRIPT -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Auto-resize textarea
-        const textarea = document.getElementById('content');
-        if (textarea) {
-            textarea.addEventListener('input', function () {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
+   // Menambahkan event listener ke tombol setelah halaman dimuat
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('bookmark-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+        const text = document.getElementById('bookmark-text');
+        const icon = btn.querySelector('i');
+        const isBookmarked = text.textContent.trim() === 'Remove from Bookmark';
+        const url = isBookmarked ? btn.dataset.removeUrl : btn.dataset.addUrl;
+        const method = isBookmarked ? 'DELETE' : 'POST';
+
+        btn.disabled = true;
+        text.textContent = 'Loading...';
+
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
             });
+
+            // Lanjutkan jika respons sukses (204 atau 200)
+            if (res.status === 200 || res.status === 204) {
+                if (isBookmarked) {
+                    text.textContent = 'Add to Bookmark';
+                    icon.className = 'bi bi-bookmark me-2';
+                    btn.classList.replace('btn-danger', 'btn-outline-danger');
+                } else {
+                    text.textContent = 'Remove from Bookmark';
+                    icon.className = 'bi bi-bookmark-fill me-2';
+                    btn.classList.replace('btn-outline-danger', 'btn-danger');
+                }
+            } else {
+                console.error('Unexpected response:', res.status);
+                text.textContent = isBookmarked ? 'Remove from Bookmark' : 'Add to Bookmark';
+            }
+
+        } catch (err) {
+            console.error('Fetch error:', err);
+            text.textContent = isBookmarked ? 'Remove from Bookmark' : 'Add to Bookmark';
+        } finally {
+            btn.disabled = false;
         }
     });
+});
+
+
 
     function loadMoreComments() {
         const btn = document.getElementById('loadMoreBtn');

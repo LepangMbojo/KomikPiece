@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
 Schema::create('komik_user', function (Blueprint $table) {
-    $table->id();
-    $table->integer('count')->default(0); // Jumlah komik yang difavoritkan
     $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-    $table->foreignId('komik_fav_id')->constrained('komiks')->onDelete('cascade');
+    $table->foreignId('komik_id')->constrained('komiks')->onDelete('cascade');
+    $table->primary(['user_id', 'komik_id']);
     $table->timestamps();
 });
 

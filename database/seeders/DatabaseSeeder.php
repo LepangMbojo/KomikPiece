@@ -37,13 +37,13 @@ class DatabaseSeeder extends Seeder
     $komik->favoredByUsers()->attach($randomUser->id);
 
     // Beberapa genre acak
-    $randomGenres = $genres->random(rand(1, 3)); // 1 sampai 3 genre
-    foreach ($randomGenres as $genre) {
-        $komik->genres()->attach($genre->id);
+    // $randomGenres = $genres->random(rand(1, 3)); // 1 sampai 3 genre
+    // foreach ($randomGenres as $genre) {
+    //     $komik->genres()->attach($genre->id);
 
 
 
-    }
+    
 }
     }}
 

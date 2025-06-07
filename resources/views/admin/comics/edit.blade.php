@@ -95,10 +95,10 @@
                                     </div>
                                     
                                     <div class="col-12">
-                                        <label for="deskripsi" class="form-label">Deskripsi *</label>
-                                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="5" 
-                                                  placeholder="Tulis sinopsis komik..." required>{{ old('deskripsi', $komik->deskripsi) }}</textarea>
-                                        <div class="form-text">Minimal 10 karakter</div>
+                                        <label for="description" class="form-label">Deskripsi *</label>
+    <textarea class="form-control" id="description" name="description" rows="5" 
+              placeholder="Tulis sinopsis komik..." required>{{ old('description', $komik->description ?? '') }}</textarea>
+    <div class="form-text">Minimal 10 karakter</div>
                                     </div>
                                 </div>
                             </div>

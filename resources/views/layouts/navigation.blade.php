@@ -11,7 +11,7 @@
                 <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <i class="bi bi-house-door me-1"></i>Home
                 </a>
-                <a href="#" class="{{ request()->routeIs('genres') ? 'active' : '' }}">
+                <a href="{{route('genre.index')}}" class="{{ request()->routeIs('genre.index') ? 'active' : '' }}">
                     <i class="bi bi-grid me-1"></i>Genres
                 </a>
                 <a href="#" class="{{ request()->routeIs('latest') ? 'active' : '' }}">
@@ -53,7 +53,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item text-white" href="#">
+                                <a class="dropdown-item text-white" href="{{ route('favorites.index') }}">
                                     <i class="bi bi-heart me-2"></i>Favorites
                                 </a>
                             </li>
