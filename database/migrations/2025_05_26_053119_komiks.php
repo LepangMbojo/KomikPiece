@@ -22,7 +22,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('author')->nullable();
             $table->integer('Favorite')->default(0);
-            $table->text('comments')->nullable();
             $table->timestamps();
         });
     }

@@ -231,37 +231,23 @@ Related Comics
     </div>
 @endif
 
-<!-- Comments Section -->
+{{-- GANTI SELURUH BAGIAN KOMENTAR ANDA DENGAN INI --}}
+
 <div class="section-container">
     <div class="section-header">
         <i class="bi bi-chat-dots"></i>
-        <span>Comments ({{ $komik->comments ? $komik->comments->count() : 0 }})</span>
+        {{-- Menampilkan jumlah komentar dari koleksi yang sudah di-load --}}
+        <span>Comments ({{ $komik->comments->count() }})</span>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show">
-            <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show">
-            <i class="bi bi-exclamation-triangle me-2"></i>{{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
+    {{-- Form untuk user yang sudah login --}}
     @auth
         <div class="comment-form mb-4">
             <form action="{{ route('komik.comments.store', $komik->id) }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="content" class="form-label">Write a comment</label>
                     <textarea class="form-control @error('content') is-invalid @enderror" 
-                              id="content" 
-                              name="content" 
-                              rows="3" 
+                              id="content" name="content" rows="3" 
                               placeholder="Share your thoughts about this comic..." 
                               required>{{ old('content') }}</textarea>
                     @error('content')
@@ -276,56 +262,46 @@ Related Comics
             </form>
         </div>
     @else
+        {{-- Pesan untuk user yang belum login --}}
         <div class="alert alert-info">
             <i class="bi bi-info-circle me-2"></i>
             <a href="{{ route('login') }}" class="alert-link">Login</a> to post comments.
         </div>
     @endauth
 
+    {{-- Daftar Komentar --}}
     <div class="comments-list">
-        @if($komik->comments && $komik->comments->count() > 0)
-            @foreach($komik->comments->sortByDesc('created_at')->take(10) as $comment)
-                <div class="comment-item">
-                    <div class="d-flex">
-                        <div class="comment-avatar me-3">
-                            <div class="avatar-circle">
-                                <i class="bi bi-person-circle fs-2 text-primary"></i>
-                            </div>
+        {{-- Gunakan @forelse untuk menangani kasus jika tidak ada komentar --}}
+        @forelse($komik->comments as $comment)
+            <div class="comment-item">
+                <div class="d-flex">
+                    <div class="comment-avatar me-3">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->name) }}&background=random" class="rounded-circle" width="40" height="40">
+                    </div>
+                    <div class="comment-content flex-grow-1">
+                        <div class="comment-header mb-2">
+                            <strong class="comment-author">
+                                {{-- Menampilkan nama user dari relasi --}}
+                                {{ $comment->user->name ?? 'Anonymous' }}
+                            </strong>
+                            <small class="text-muted ms-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </small>
                         </div>
-                        <div class="comment-content flex-grow-1">
-                            <div class="comment-header mb-2">
-                                <strong class="comment-author">
-                                    {{ $comment->user ? $comment->user->name : 'Anonymous' }}
-                                </strong>
-                                <small class="text-muted ms-2">
-                                    {{ $comment->created_at ? $comment->created_at->diffForHumans() : 'Unknown time' }}
-                                </small>
-                            </div>
-                            <div class="comment-text">
-                                {{ $comment->content }}
-                            </div>
+                        <div class="comment-text">
+                            {{ $comment->content }}
                         </div>
                     </div>
                 </div>
-            @endforeach
-        @else
-            <div class="text-center py-5">
-                <i class="bi bi-chat display-1 text-muted"></i>
-                <h6 class="mt-3 text-muted">No comments yet</h6>
-                <p class="text-muted">Be the first to share your thoughts!</p>
             </div>
-        @endif
-
-        @if($komik->comments && $komik->comments->count() > 10)
-            <div class="text-center mt-4">
-                <button class="btn btn-outline-light" onclick="loadMoreComments()" id="loadMoreBtn">
-                    <i class="bi bi-arrow-down me-2"></i>Load More Comments
-                </button>
+        @empty
+            {{-- Tampilan ini akan muncul jika $komik->comments kosong --}}
+            <div class="text-center py-4">
+                <p class="text-muted">No comments yet. Be the first to share your thoughts!</p>
             </div>
-        @endif
+        @endforelse
     </div>
 </div>
-
 <!-- STYLE -->
 <style>
     :root {

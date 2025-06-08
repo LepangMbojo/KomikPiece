@@ -101,7 +101,7 @@ protected $fillable = [
 
    public function comments()
 {
-    return $this->hasMany(Comments::class, 'komik_id')->latest();
+    return $this->hasMany(\App\Models\Comments::class, 'komik_id')->latest();
 }
      public function genres()
     {

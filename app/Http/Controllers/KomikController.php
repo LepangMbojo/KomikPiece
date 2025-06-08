@@ -92,6 +92,11 @@ public function dashboard()
                                      ->inRandomOrder() // Dibuat random agar lebih bervariasi
                                      ->limit(6)
                                      ->get();
+// dd($komik->comments);
+// dd($komik->toArray());
+    // dd(get_class_methods($komik));
+
+
 
         // ===================================================================
         // LOGIKA UNTUK MENGECEK STATUS FAVORIT (DITAMBAHKAN DI SINI)
@@ -138,17 +143,21 @@ public function dashboard()
         return view('komik.chapter', compact('komik', 'chapter'));
     }
     
-    public function storeComment(Request $request, $id)
-{
+    // Anda bisa menggunakan Route Model Binding untuk kode yang lebih bersih
+    // Pastikan di routes/web.php Anda menggunakan {komik} bukan {id}
+    // Contoh: Route::post('/komik/{komik}/comments', ...)
+
+    public function storeComment(Request $request, \App\Models\KomikIndex $komik)
+    {
     $request->validate([
         'content' => 'required|string|min:3|max:1000'
     ]);
 
-    $komik = KomikIndex::findOrFail($id);
-
-    Comments::create([
-        'user_id' => auth()->id(),
-        'komik_id' => $komik->id,
+    // Gunakan relasi untuk membuat komentar baru.
+    // 'komik_id' akan diisi secara otomatis oleh Laravel.
+    // Anda tidak perlu lagi mendaftarkan 'komik_id' di $fillable pada model Comments.
+    $komik->comments()->create([
+        'user_id' => auth()->id(), // 'user_id' dan 'content' tetap perlu ada di $fillable
         'content' => $request->content
     ]);
 
