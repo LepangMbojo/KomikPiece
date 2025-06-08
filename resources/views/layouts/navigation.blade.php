@@ -14,12 +14,6 @@
                 <a href="{{route('genre.index')}}" class="{{ request()->routeIs('genre.index') ? 'active' : '' }}">
                     <i class="bi bi-grid me-1"></i>Genres
                 </a>
-                <a href="#" class="{{ request()->routeIs('latest') ? 'active' : '' }}">
-                    <i class="bi bi-clock me-1"></i>Latest
-                </a>
-                <a href="#" class="{{ request()->routeIs('popular') ? 'active' : '' }}">
-                    <i class="bi bi-fire me-1"></i>Popular
-                </a>
 
                 @auth
                     @if(auth()->user()->isAdmin())

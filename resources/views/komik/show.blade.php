@@ -99,7 +99,7 @@
                             <div class="col-md-6">
                                 <div class="meta-item">
                                     <span class="meta-label">Updated:</span>
-                                    <span class="meta-value">{{ $komik->updated_at->diffForHumans() }}</span>
+                                  <span class="meta-value">{{ $komik->created_at->diffForHumans() }}</span>
                                 </div>
                             </div>
                         </div>
@@ -282,7 +282,7 @@ Related Comics
                         <div class="comment-header mb-2">
                             <strong class="comment-author">
                                 {{-- Menampilkan nama user dari relasi --}}
-                                {{ $comment->user->name ?? 'Anonymous' }}
+                                {{ $comment->user->username ?? 'Anonymous' }}
                             </strong>
                             <small class="text-muted ms-2">
                                 {{ $comment->created_at->diffForHumans() }}
