@@ -20,13 +20,15 @@ protected $table = 'komiks';
 
 protected $fillable = [
         'judul',
+        'slug',
+        'language',
         'cover',
-        'genre',
         'author',
         'description',
         'status',
         'rating',
         'views'
+        
     ];
 
     protected $casts = [
@@ -107,7 +109,7 @@ protected $fillable = [
     {
         return $this->belongsToMany(
             Genre::class,           // Model yang dihubungkan
-            'komik_genre',          // Nama tabel pivot
+            'genre_komik',          // Nama tabel pivot
             'komik_id',             // Foreign key untuk model ini
             'genre_id'              // Foreign key untuk model Genre
         );

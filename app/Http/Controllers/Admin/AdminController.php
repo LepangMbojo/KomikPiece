@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\KomikIndex as Komik;
 use App\Models\Chapter;
 use App\Models\User;
+use App\Models\Genre;
+use Illuminate\Support\Facades\DB;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -40,11 +43,7 @@ class AdminController extends Controller
 
     public function createComic()
     {
-        $genres = [
-            'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
-            'Horror', 'Romance', 'Sci-Fi', 'Slice of Life', 'Sports',
-            'Supernatural', 'Thriller', 'Mystery', 'Historical'
-        ];
+        $genres = Genre::orderBy('name', 'asc')->get();
         
         $languages = ['Indonesia', 'English', 'Japanese', 'Korean', 'Chinese'];
         
@@ -52,91 +51,87 @@ class AdminController extends Controller
     }
 
     public function storeComic(Request $request)
-    {
-        $request->validate([
+{
+    // 1. Validasi (Sudah bagus, hanya perlu memastikan 'genres.*' ada)
+    $validatedData = $request->validate([
         'judul' => 'required|string|max:255|unique:komiks,judul',
         'cover' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         'description' => 'required|string|min:10',
         'author' => 'required|string|max:255',
-        'status' => 'required|string|max:50',
-        'language' => 'required|string|max:50',
-        'genre' => 'required|string|max:100',  // Tambahkan validasi genre
+        'status' => 'required|string',
         'release_year' => 'required|integer|min:1900|max:' . date('Y'),
-        
-        // Validasi chapter
-        'chapter_number' => 'required|integer|min:1',
+        'genres' => 'nullable|array', // Validasi bahwa 'genres' adalah array
+        'genres.*' => 'exists:genres,id', // Validasi setiap ID genre ada di tabel genres
+
+        // Validasi chapter pertama
+        'chapter_number' => 'required|numeric|min:0',
         'chapter_title' => 'nullable|string|max:255',
+        'chapter_pages' => 'required|array', // Pastikan chapter_pages adalah array
         'chapter_pages.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
     ]);
 
-        try {
-            \DB::beginTransaction();
+    $coverPath = null;
+    $chapterPages = [];
 
-            // Upload cover
-           $coverPath = $request->file('cover')->store('covers', 'public');
+    try {
+        DB::beginTransaction();
 
-        // Buat komik
-        $comic = Komik::create([
-            'judul' => $request->judul,
-            'slug' => Str::slug($request->judul),
+        // 2. Upload cover
+        $coverPath = $request->file('cover')->store('covers', 'public');
+
+        // 3. Buat data komik utama. HAPUS baris 'genre' dari sini.
+        $komik = Komik::create([
+            'judul' => $validatedData['judul'],
+            'slug' => Str::slug($validatedData['judul']),
             'cover' => $coverPath,
-            'description' => $request->description,
-            'author' => $request->author,
-            'status' => $request->status,
-            'language' => $request->language,
-            'genre' => $request->genre,  // Tambahkan ini
-            'release_year' => $request->release_year,
-            'rating' => 0,
-            'chapter' => 1,
-            'Favorite' => 0,
+            'description' => $validatedData['description'],
+            'author' => $validatedData['author'],
+            'status' => $validatedData['status'],
+            'release_year' => $validatedData['release_year'],
+
+            // Hapus 'language', 'rating', 'chapter', 'Favorite' jika tidak ada di form/validasi
+            // atau berikan nilai default
             'views' => 0,
         ]);
 
-        // ... rest of the code
-    
+        // =====================================================================
+        // PERUBAHAN UTAMA: Lampirkan (Attach) Genre di Sini
+        // =====================================================================
+        if (!empty($validatedData['genres'])) {
+            $komik->genres()->attach($validatedData['genres']);
+        }
+        // =====================================================================
 
-            // Upload halaman chapter
-            $chapterPages = [];
-            if ($request->hasFile('chapter_pages')) {
-                foreach ($request->file('chapter_pages') as $index => $page) {
-                    $pagePath = $page->store("chapters/{$comic->id}/{$request->chapter_number}", 'public');
-                    $chapterPages[] = $pagePath;
-                }
-            }
-
-            // Buat chapter
-            Chapter::create([
-                'komik_id' => $comic->id,
-                'chapter_number' => $request->chapter_number,
-                'title' => $request->chapter_title,
-                'pages' => $chapterPages,
-                'views' => 0,
-            ]);
-
-            \DB::commit();
-
-            return redirect()->route('admin.comics')->with('success', 'Komik dan chapter berhasil ditambahkan!');
-
-        } catch (\Exception $e) {
-            \DB::rollback();
-            
-            // Hapus file yang sudah diupload jika ada error
-            if (isset($coverPath) && Storage::disk('public')->exists($coverPath)) {
-                Storage::disk('public')->delete($coverPath);
-            }
-            
-            if (!empty($chapterPages)) {
-                foreach ($chapterPages as $pagePath) {
-                    if (Storage::disk('public')->exists($pagePath)) {
-                        Storage::disk('public')->delete($pagePath);
-                    }
-                }
-            }
-
-            return back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        // 4. Upload halaman chapter (kode Anda sudah benar)
+        foreach ($request->file('chapter_pages') as $page) {
+            $pagePath = $page->store("chapters/{$komik->id}/{$validatedData['chapter_number']}", 'public');
+            $chapterPages[] = $pagePath;
         }
 
+        // 5. Buat chapter pertama (kode Anda sudah benar)
+        $komik->chapters()->create([
+            'chapter_number' => $validatedData['chapter_number'],
+            'title' => $validatedData['chapter_title'],
+            'pages' => $chapterPages,
+        ]);
+
+        DB::commit();
+
+        return redirect()->route('admin.comics')->with('success', 'Komik dan chapter pertama berhasil ditambahkan!');
+
+    } catch (\Exception $e) {
+        DB::rollback();
         
+        // Hapus file yang sudah diupload jika ada error (kode Anda sudah benar)
+        if ($coverPath && Storage::disk('public')->exists($coverPath)) {
+            Storage::disk('public')->delete($coverPath);
+        }
+        if (!empty($chapterPages)) {
+            Storage::disk('public')->deleteDirectory("chapters/{$komik->id}/{$request->chapter_number}");
+        }
+
+        return back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    }
     }
 
     public function showComic($id)
@@ -148,55 +143,67 @@ class AdminController extends Controller
     public function editComic($id)
     {
         $komik = Komik::findOrFail($id);
-        $genres = [
-            'Action', 'Adventure', 'Comedy', 'Drama', 'Fantasy', 
-            'Horror', 'Romance', 'Sci-Fi', 'Slice of Life', 'Sports',
-            'Supernatural', 'Thriller', 'Mystery', 'Historical'
-        ];
+
+        $genres = Genre::orderBy('name', 'asc')->get();
         
         $languages = ['Indonesia', 'English', 'Japanese', 'Korean', 'Chinese'];
         
         return view('admin.comics.edit', compact('komik', 'genres', 'languages'));
     }
 
-    public function updateComic(Request $request, $id)
+     public function updateComic(Request $request, $id)
     {
-        $komik = Komik::findOrFail($id);
-        
-        $request->validate([
+        // dd($request->all());
+        // 1. Validasi Data
+        // Kita tambahkan validasi untuk 'genres' di sini
+        $validatedData = $request->validate([
+            // unique rule harus mengabaikan ID dari komik yang sedang diedit
             'judul' => 'required|string|max:255|unique:komiks,judul,' . $id,
             'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'description' => 'required|string|min:10',
             'author' => 'required|string|max:255',
-            'status' => 'required|string|max:50',
-            'language' => 'required|string|max:50',
+            'status' => 'required|string',
             'release_year' => 'required|integer|min:1900|max:' . date('Y'),
+            'genres' => 'nullable|array',
+            'genres.*' => 'exists:genres,id'
         ]);
 
-        $updateData = [
-            'judul' => $request->judul,
-            'slug' => Str::slug($request->judul),
-            'description' => $request->description,
-            'author' => $request->author,
-            'status' => $request->status,
-            'language' => $request->language,
-            'release_year' => $request->release_year,
-        ];
+        $komik = Komik::findOrFail($id);
 
-        // Update cover jika ada file baru
+        // 2. Ambil semua data yang sudah divalidasi, KECUALI 'genres' dan 'cover'
+        // karena akan kita proses secara terpisah.
+        $updateData = $request->except(['_token', '_method', 'cover', 'genres']);
+        
+        // Tambahkan slug secara manual
+        $updateData['slug'] = Str::slug($request->judul);
+
+
+        // 3. Update cover jika ada file baru (logika Anda sudah benar)
         if ($request->hasFile('cover')) {
-            // Hapus cover lama
+            // Hapus cover lama jika ada
             if ($komik->cover && Storage::disk('public')->exists($komik->cover)) {
                 Storage::disk('public')->delete($komik->cover);
             }
-            
+            // Simpan cover baru dan tambahkan path-nya ke data update
             $updateData['cover'] = $request->file('cover')->store('covers', 'public');
         }
 
+        // 4. Lakukan update data utama komik
         $komik->update($updateData);
 
-        return redirect()->route('admin.comics')->with('success', 'Komik berhasil diupdate!');
+        // =====================================================================
+        // PERUBAHAN UTAMA: Sinkronisasi (Sync) Genre di Sini
+        // =====================================================================
+        // Gunakan sync() untuk memperbarui relasi genre di tabel pivot.
+        // `input('genres', [])` akan mengirim array kosong jika tidak ada genre yang dipilih,
+        // yang akan membuat sync() menghapus semua genre dari komik ini.
+        $komik->genres()->sync($request->input('genres', []));
+        // =====================================================================
+
+        return redirect()->route('admin.comics.show', $komik->id)->with('success', 'Komik berhasil diupdate!');
     }
+
+
 
     public function deleteComic($id)
     {

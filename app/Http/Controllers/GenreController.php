@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\KomikIndex;
 use App\Models\Genre;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class GenreController extends Controller
 {
-  /**
-     * Menampilkan halaman daftar semua genre yang tersedia untuk dipilih pengguna.
+    /**
+     * Menampilkan halaman daftar semua genre yang tersedia.
      *
      * @return \Illuminate\View\View
      */
@@ -18,29 +16,30 @@ class GenreController extends Controller
     {
         // Mengambil semua genre, diurutkan berdasarkan nama.
         // withCount('komiks') akan menambahkan properti 'komiks_count' 
-        // pada setiap genre, ini efisien untuk menampilkan jumlah komik.
+        // pada setiap genre, ini efisien untuk menampilkan jumlah komik per genre.
         $genres = Genre::withCount('komiks')->orderBy('name', 'asc')->get();
 
-        // Mengembalikan view 'index' yang ada di folder 'genres'.
-        return view('komik.genre', compact('genres'));
+        // Mengembalikan view 'index' yang ada di folder 'genre'.
+        // Pastikan Anda memiliki file view di resources/views/genre/index.blade.php
+        return view('genre.index', compact('genres'));
     }
 
     /**
-     * Menampilkan daftar komik berdasarkan genre yang dipilih pengguna.
-     * Kita akan menggunakan 'slug' dari genre untuk URL yang lebih baik (SEO-friendly).
+     * Menampilkan daftar komik berdasarkan genre yang dipilih.
      *
-     * @param  \App\Models\Genre  $genre  // Ini adalah Route-Model Binding
+     * @param  string  $slug
      * @return \Illuminate\View\View
      */
-    public function show(Genre $genre)
+    public function show($slug)
     {
-        // Laravel secara otomatis akan menemukan genre berdasarkan slug dari URL.
-        
-        // Mengambil komik-komik yang berhubungan dengan genre ini.
-        // Gunakan paginate() agar halaman tidak berat jika komiknya banyak.
-        $komiks = $genre->komiks()->latest()->paginate(16); // Menampilkan 16 komik per halaman
+        // 1. Cari genre berdasarkan slug. Jika tidak ada, tampilkan halaman 404.
+        $genre = Genre::where('slug', $slug)->firstOrFail();
 
-        // Mengembalikan view 'show' yang ada di folder 'genres'.
-        return view('komik.genre', compact('genre', 'komiks'));
+        // 2. Ambil semua komik yang terhubung dengan genre ini, dengan paginasi.
+        $komiks = $genre->komiks()->latest()->paginate(12); // Menampilkan 12 komik per halaman
+
+        // 3. Tampilkan view dan kirim data genre beserta daftar komiknya.
+        // Pastikan Anda memiliki file view di resources/views/genre/show.blade.php
+        return view('genre.show', compact('genre', 'komiks'));
     }
 }

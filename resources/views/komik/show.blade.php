@@ -61,17 +61,15 @@
     <div class="meta-item">
         <span class="meta-label">Genre:</span>
         <span class="meta-value">
-            @if($komik->genre)
-                <!-- Jika genre adalah string tunggal -->
-                <span class="badge bg-primary">{{ $komik->genre }}</span>
-                
-                <!-- ATAU jika genre adalah string dengan koma sebagai pemisah -->
-                <!-- 
-                @foreach(explode(',', $komik->genre) as $genre)
-                    <span class="badge bg-dark me-1">{{ trim($genre) }}</span>
-                @endforeach
-                -->
-            @else
+             @if($komik->genres)
+        @foreach($komik->genres as $genre)
+            {{-- Karena $genre sekarang adalah objek, kita bisa mengakses propertinya --}}
+            <a href="{{ route('comics.genre', $genre->slug) }}" class="badge bg-secondary text-decoration-none">
+                {{ $genre->name }}
+            </a>
+        @endforeach
+    @endif  
+            @if($komik->genres->isEmpty())
                 <span class="text-muted">No genre specified</span>
             @endif
         </span>

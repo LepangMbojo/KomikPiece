@@ -82,7 +82,7 @@ public function dashboard()
    public function show($id)
 {
     try {
-        $komik = KomikIndex::with(['chapters', 'comments.user'])->findOrFail($id);
+        $komik = KomikIndex::with(['chapters', 'comments.user','genres'])->findOrFail($id);
 
         // Increment views
         $komik->increment('views');
@@ -91,11 +91,11 @@ public function dashboard()
         $relatedkomiks = KomikIndex::where('id', '!=', $id)
                                      ->inRandomOrder() // Dibuat random agar lebih bervariasi
                                      ->limit(6)
-                                     ->get();
+                                        ->get();
 // dd($komik->comments);
 // dd($komik->toArray());
     // dd(get_class_methods($komik));
-
+        //    dd($komik->toArray());
 
 
         // ===================================================================

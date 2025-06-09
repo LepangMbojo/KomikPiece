@@ -82,17 +82,38 @@
                                         </select>
                                     </div>
                                     
-                                    <div class="col-md-12">
-                                        <label for="genre" class="form-label">Genre *</label>
-                                        <select class="form-control" id="genre" name="genre" required>
-                                            <option value="">Pilih Genre</option>
-                                            @foreach($genres as $genre)
-                                                <option value="{{ $genre }}" {{ old('genre', $komik->genre) == $genre ? 'selected' : '' }}>
-                                                    {{ $genre }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                   <div class="col-12">
+    <label class="form-label">Genres</label>
+    {{-- Wadah agar bisa di-scroll jika genrenya banyak --}}
+    <div class="p-3 border rounded" style="background-color: var(--card-bg); max-height: 200px; overflow-y: auto;">
+        <div class="row">
+            {{-- Loop semua genre yang ada dari database --}}
+            @foreach($genres as $genre)
+                <div class="col-md-4 col-sm-6">
+                    <div class="form-check">
+                        <input 
+                            class="form-check-input" 
+                            type="checkbox"
+                            name="genres[]"  {{-- Tanda [] ini SANGAT PENTING agar data dikirim sebagai array --}}
+                            value="{{ $genre->id }}" {{-- Nilai yang dikirim adalah ID genre --}}
+                            id="genre-{{ $genre->id }}"
+                            {{-- Logika untuk memberi centang pada genre yang sudah dimiliki komik ini --}}
+                            @if(is_array(old('genres')) ? in_array($genre->id, old('genres')) : $komik->genres->contains($genre->id))
+                                checked 
+                            @endif
+                        >
+                        <label class="form-check-label" for="genre-{{ $genre->id }}">
+                            {{ $genre->name }}
+                        </label>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    @error('genres')
+        <div class="text-danger small mt-1">{{ $message }}</div>
+    @enderror
+</div>
                                     
                                     <div class="col-12">
                                         <label for="description" class="form-label">Deskripsi *</label>
