@@ -5,42 +5,48 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
+        <h2 class="mb-4 text-center text-orange-500 text-2xl font-bold">Login</h2>
+
         <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" style="color: black;" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="mb-3">
+            <label for="email" class="form-label text-white">Email</label>
+            <input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username"
+                 class="w-full bg-white text-black rounded-2xl shadow p-2 @error('email') is-invalid @enderror" placeholder="email@example.com">
+            <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger" />
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full text-black" type="password" name="password" required autocomplete="current-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="mb-3">
+            <label for="password" class="form-label text-white">Password</label>
+            <input id="password" type="password" name="password" required autocomplete="current-password"
+                 class="w-full bg-white text-black rounded-2xl shadow p-2 @error('password') is-invalid @enderror" placeholder="Password">
+            <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger" />
         </div>
 
         <!-- Show Password -->
-        <div class="block mt-4">
+        <div class="mb-4">
             <label for="show_password" class="inline-flex items-center">
-                <input id="show_password" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" onclick="togglePasswordCheckbox('password')">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">Show Password</span>
+                <input id="show_password" type="checkbox" onclick="togglePasswordCheckbox('password')"
+                    class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800">
+                <span class="ms-2 text-sm text-gray-300">Show Password</span>
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-between align-items-center">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                <a class="text-light small" href="{{ route('password.request') }}">
+                    Lupa password?
                 </a>
             @endif
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            <button type="submit" class="btn btn-primary">
+                Login
+            </button>
         </div>
     </form>
 
-    <!-- Toggle Password Script -->
+    <!-- Script toggle password -->
     <script>
         function togglePasswordCheckbox(fieldId) {
             const field = document.getElementById(fieldId);
