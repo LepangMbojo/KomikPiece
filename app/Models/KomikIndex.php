@@ -117,6 +117,14 @@ protected $fillable = [
     
     public function getLatestChapterAttribute()
     {
+        // Cek apakah relasi 'chapters' sudah dimuat ke memori (oleh with('chapters') di controller)
+        if ($this->relationLoaded('chapters')) {
+            // Jika ya, ambil nilai max dari koleksi yang sudah ada. Ini sangat cepat!
+            return $this->chapters->max('chapter_number') ?? 0;
+        }
+
+        // Jika relasi belum dimuat (sebagai fallback), jalankan query ke DB.
+        // Ini berguna jika Anda memanggil $komik->latest_chapter di tempat lain tanpa 'with()'.
         return $this->chapters()->max('chapter_number') ?? 0;
     }
 

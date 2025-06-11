@@ -2,13 +2,13 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
             <!-- Logo -->
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
+            <a class="navbar-brand" href="{{ route('index') }}">
                 <i class="bi bi-book me-2"></i>{{ config('app.name', 'KomikPiece') }}
             </a>
 
             <!-- Navigation Menu -->
             <div class="nav-menu d-flex align-items-center gap-3">
-                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a href="{{ route('index') }}" class="{{ request()->routeIs('index') ? '' : '' }}">
                     <i class="bi bi-house-door me-1"></i>Home
                 </a>
                 <a href="{{route('genre.index')}}" class="{{ request()->routeIs('genre.index') ? 'active' : '' }}">

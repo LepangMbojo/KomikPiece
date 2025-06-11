@@ -1,16 +1,6 @@
 <x-app-layout>
 
 
-    <div class="container py-4">
-        @if(isset($isDashboard) && $isDashboard)
-            <!-- Welcome message untuk dashboard -->
-            <div class="section-container mb-4">
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle me-2"></i>
-                    Selamat datang kembali, {{ $user->username }}! Lanjutkan petualangan membaca komikmu.
-                </div>
-            </div>
-        @endif
     
         <!-- Rest of the content sama seperti index.blade.php -->
         <!-- ... -->
@@ -64,15 +54,16 @@
              class="comic-cover">
         <!-- <pre>{{ $comic->cover }}</pre> -->
 
-        
-
         <div class="comic-info">
             <h6 class="comic-title">{{ $comic->judul }}</h6>
             <div class="comic-meta">
                 <span class="comic-rating">
                     <i class="bi bi-star-fill"></i> {{ $comic->rating ?? 0 }}
                 </span>
-                <span class="comic-chapter">Ch. {{ $comic->chapter ?? 0 }}</span>
+               <span class="comic-chapter">
+                {{-- INI CARA MEMANGGIL YANG BENAR --}}
+                Ch. {{ $komik->chapters_max_chapter_number ?? 'Baru' }}
+            </span>
             </div>
         </div>
     </div>

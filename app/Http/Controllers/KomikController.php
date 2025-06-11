@@ -15,70 +15,56 @@ use Illuminate\Support\Facades\Storage;
 
 class KomikController extends Controller
 {
-    // Di dalam file: app/Http/Controllers/KomikController.php
 
 public function index()
 {
-   $komiks = \App\Models\KomikIndex::latest()->paginate(12);
+    // Cek apakah ada pengguna yang sedang login
+    if (auth()->check()) {
+        // --- LOGIKA UNTUK DASHBOARD ---
+        $latestKomiks = KomikIndex::withMax('chapters', 'chapter_number')->latest()->paginate(12);
+        $popularKomiks = $this->getPopularComics(6); // Memanggil helper method
+        $user = auth()->user();
+        $bookmarkedComics = []; 
+        $recentlyRead = [];
+        
+        return view('komik.index', [
+            'isDashboard'      => true,
+            'komiks'           => $latestKomiks,
+            'popularKomiks'    => $popularKomiks,
+            'user'             => $user,
+            'bookmarkedComics' => $bookmarkedComics,
+            'recentlyRead'     => $recentlyRead,
+        ]);
 
-    // 2. Ambil data komik yang berpotensi populer dari DB
-    $potentiallyPopular = \App\Models\KomikIndex::query()
-        ->withCount('favoredByUsers') // Tetap hitung jumlah favorit
-        ->orderByDesc('views') // Lakukan pra-filter awal berdasarkan views
-        ->limit(100) // Ambil 100 komik dengan views terbanyak
-        ->get();
-
-    // 3. Hitung skor dan urutkan menggunakan Collection di PHP
-    $popularKomiks = $potentiallyPopular->sortByDesc(function ($komik) {
-        // Rumus yang sama, tapi dihitung di PHP
-        return $komik->views;
-    })->take(5); // Ambil 6 teratas setelah diurutkan
-
-    // 4. Kirim kedua data ke view
-    return view('komik.index', compact('komiks', 'popularKomiks'));
+    } else {
+        // --- LOGIKA UNTUK HALAMAN UTAMA PUBLIK ---
+        $komiks = KomikIndex::withMax('chapters', 'chapter_number')->latest()->paginate(12);
+        $popularKomiks = $this->getPopularComics(6);
+//  dd($komiks->toArray());
+        return view('komik.index', compact('komiks', 'popularKomiks'));
+    }
 }
+    /**
+     * Method pribadi untuk mengambil komik populer.
+     * Hanya bisa diakses dari dalam controller ini.
+     *
+     * @param int $limit Jumlah komik yang ingin diambil
+     * @return \Illuminate\Support\Collection
+     */
+    private function getPopularComics(int $limit)
+    {
+        $potentiallyPopular = KomikIndex::query() // Menghitung jumlah favorit
+            ->orderByDesc('views')          // Pra-filter berdasarkan views
+            ->limit(100)                    // Ambil 100 kandidat teratas
+            ->get();
 
-
-    // Method baru untuk dashboard
-  // Di dalam KomikController.php
-
-public function dashboard()
-{
-    // 1. Ambil komik terbaru untuk dashboard
-    $latestKomiks = \App\Models\KomikIndex::latest()->take(6)->get();
-
-    // 2. Logika yang sama untuk mengambil data populer
-    $potentiallyPopular = \App\Models\KomikIndex::query()
-        ->withCount('favoredByUsers')
-        ->orderByDesc('views')
-        ->limit(100)
-        ->get();
-
-    $popularKomiks = $potentiallyPopular->sortByDesc(function ($komik) {
-        return $komik->views;
-    })->take(5); // Ambil 8 teratas untuk dashboard
-
-    // 3. Siapkan data lain untuk dashboard
-    $user = auth()->user();
-    
-    // ===================================================================
-    // KEMBALIKAN VARIABEL INI UNTUK MENCEGAH ERROR DI VIEW
-    // TODO: Nantinya, ganti array kosong ini dengan query database asli saat fiturnya sudah dibuat.
-    $bookmarkedComics = []; 
-    $recentlyRead = [];
-    // ===================================================================
-    
-    // 4. Kirim SEMUA variabel yang dibutuhkan oleh view
-    return view('komik.index', [ // Pastikan nama view sudah benar ('index' atau 'komik.index')
-        'isDashboard'      => true,
-        'komiks'           => $latestKomiks,
-        'popularKomiks'    => $popularKomiks,
-        'user'             => $user,
-        'bookmarkedComics' => $bookmarkedComics, // <-- Kirim variabel ini
-        'recentlyRead'     => $recentlyRead,   // <-- Kirim variabel ini
-    ]);
-}
-    
+        // Hitung skor popularitas dan urutkan di PHP
+        return $potentiallyPopular->sortByDesc(function ($komik) {
+            // Rumus: (jumlah views) + (jumlah favorit * 50)
+            return $komik->views;
+        })->take($limit); // Ambil sejumlah $limit teratas setelah diurutkan
+    }
+     
    public function show($id)
 {
     try {

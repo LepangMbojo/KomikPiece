@@ -66,6 +66,13 @@
                                             <option value="hiatus" {{ old('status') == 'hiatus' ? 'selected' : '' }}>Hiatus</option>
                                         </select>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <label for="rating" class="form-label">Rating Awal</label>
+                                        <input type="number" class="form-control" id="rating" name="rating" 
+                                            step="0.1" min="0" max="10" value="{{ old('rating', 0) }}">
+                                    </div>
+
                                     
                                     <div class="col-md-6">
                                         <label for="language" class="form-label">Bahasa *</label>

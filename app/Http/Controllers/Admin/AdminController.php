@@ -59,9 +59,11 @@ class AdminController extends Controller
         'description' => 'required|string|min:10',
         'author' => 'required|string|max:255',
         'status' => 'required|string',
-        'release_year' => 'required|integer|min:1900|max:' . date('Y'),
+       'language' => 'required|string|max:50',         // <-- TAMBAHKAN VALIDASI
+        'rating' => 'nullable|numeric|min:0|max:10', // <-- TAMBAHKAN VALIDASI
         'genres' => 'nullable|array', // Validasi bahwa 'genres' adalah array
         'genres.*' => 'exists:genres,id', // Validasi setiap ID genre ada di tabel genres
+
 
         // Validasi chapter pertama
         'chapter_number' => 'required|numeric|min:0',
@@ -82,12 +84,14 @@ class AdminController extends Controller
         // 3. Buat data komik utama. HAPUS baris 'genre' dari sini.
         $komik = Komik::create([
             'judul' => $validatedData['judul'],
-            'slug' => Str::slug($validatedData['judul']),
             'cover' => $coverPath,
+            'slug' => Str::slug($validatedData['judul']),
             'description' => $validatedData['description'],
             'author' => $validatedData['author'],
             'status' => $validatedData['status'],
-            'release_year' => $validatedData['release_year'],
+            'language' => $validatedData['language'],   // <-- TAMBAHKAN PENYIMPANAN
+            'rating' => $validatedData['rating'] ?? 0, 
+            
 
             // Hapus 'language', 'rating', 'chapter', 'Favorite' jika tidak ada di form/validasi
             // atau berikan nilai default
@@ -164,6 +168,8 @@ class AdminController extends Controller
             'author' => 'required|string|max:255',
             'status' => 'required|string',
             'release_year' => 'required|integer|min:1900|max:' . date('Y'),
+            'language' => 'required|string|max:50',         // <-- TAMBAHKAN VALIDASI
+            'rating' => 'nullable|numeric|min:0|max:10',
             'genres' => 'nullable|array',
             'genres.*' => 'exists:genres,id'
         ]);

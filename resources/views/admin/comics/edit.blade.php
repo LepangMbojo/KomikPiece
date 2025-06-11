@@ -69,6 +69,12 @@
                                             <option value="hiatus" {{ old('status', $komik->status) == 'hiatus' ? 'selected' : '' }}>Hiatus</option>
                                         </select>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <label for="rating" class="form-label">Rating</label>
+                                        <input type="number" class="form-control" id="rating" name="rating" 
+                                            step="0.1" min="0" max="10" value="{{ old('rating', $komik->rating) }}">
+                                    </div>
                                     
                                     <div class="col-md-6">
                                         <label for="language" class="form-label">Bahasa *</label>
