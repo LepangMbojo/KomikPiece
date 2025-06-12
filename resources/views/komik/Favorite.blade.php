@@ -24,17 +24,7 @@
             {{-- Grid untuk menampilkan daftar komik favorit --}}
          <div class="comic-grid" >
     @forelse($favoriteKomiks as $komik)
-        <a href="{{ route('komik.show', $komik->id) }}" class="comic-item">
-            <img src="{{ $komik->cover_image }}" alt="{{ $komik->judul }}" class="comic-cover">
-            <div class="comic-info">
-                <div class="comic-title">{{ $komik->judul }}</div>
-                <div class="comic-meta">
-                    {{-- Menampilkan chapter terakhir dan status, bisa disesuaikan jika perlu --}}
-                    <span><i class="bi bi-journal-bookmark-fill"></i> Ch. {{ $komik->latest_chapter ?? 'Baru' }}</span>
-                    <span class="ms-2"><i class="bi bi-clock-history"></i> {{ $komik->status }}</span>
-                </div>
-            </div>
-        </a>
+        <x-comic-card :komik="$komik" />
     @empty
         {{-- Tampilan ini akan muncul jika tidak ada komik favorit --}}
         <div class="empty-state">

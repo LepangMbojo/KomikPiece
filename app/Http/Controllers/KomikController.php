@@ -74,10 +74,12 @@ public function index()
         $komik->increment('views');
 
         // Get related komiks (nama variabel diperbaiki menjadi camelCase)
-        $relatedkomiks = KomikIndex::where('id', '!=', $id)
-                                     ->inRandomOrder() // Dibuat random agar lebih bervariasi
-                                     ->limit(6)
-                                        ->get();
+       $relatedkomiks = KomikIndex::where('id', '!=', $id)
+                              // Tambahkan withCount untuk data yang dibutuhkan di kartu komik
+                            ->withCount(['chapters', 'comments'])
+                                          ->inRandomOrder()
+                                          ->limit(6)
+                                          ->get();
 // dd($komik->comments);
 // dd($komik->toArray());
     // dd(get_class_methods($komik));
