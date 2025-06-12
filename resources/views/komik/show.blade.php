@@ -2,13 +2,7 @@
    <x-slot name="header">
     <x-page-header
         :title="$komik->judul"
-        :breadcrumbs="[
-            ['name' => 'Home', 'url' => route('index')],
-            ['name' => 'Komiks', 'url' => route('index')],
-            ['name' => $komik->judul]
-            
-        ]"
-    />
+        />
 </x-slot>
 
     <div class="container py-4">
@@ -136,7 +130,7 @@
 
             <!-- PERBAIKI BAGIAN CHAPTERS LIST -->
 <div class="chapters-list" id="chaptersList">
-    @forelse($komik->chapters ?? [] as $chapter)
+    @forelse($komik->chapters->sortByDesc('chapter_number') as $chapter)
         <div class="chapter-item">
             <div class="row align-items-center">
                 <div class="col-md-8">
