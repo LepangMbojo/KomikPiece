@@ -36,10 +36,6 @@
 
     <div class="comic-grid">
     @forelse($komiks as $komik)
-        {{-- 
-          Memanggil komponen 'comic-card' dan mengirim data dari variabel $komik 
-          ke dalam komponen tersebut melalui prop :komik
-        --}}
         <x-comic-card :komik="$komik" />
     @empty
         <div class="text-center py-5">

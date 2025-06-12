@@ -1,16 +1,14 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="h4 mb-0">{{ $komik->title }}</h2>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
-                   <li class="breadcrumb-item"><a href="{{ route('index') }}">Komiks</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ $komik->title }}</li>
-                </ol>
-            </nav>
-        </div>
-    </x-slot>
+   <x-slot name="header">
+    <x-page-header
+        :title="$komik->judul"
+        :breadcrumbs="[
+            ['name' => 'Home', 'url' => route('index')],
+            ['name' => 'Komiks', 'url' => route('index')],
+            ['name' => $komik->judul]
+        ]"
+    />
+</x-slot>
 
     <div class="container py-4">
         <!-- komik Detail Header -->
@@ -199,36 +197,7 @@
             @endif
         </div>
 
-
-Related Comics
-@if($relatedkomiks->count() > 0)
-    <div class="section-container">
-        <div class="section-header">
-            <i class="bi bi-collection"></i>
-            <span>Related Comics</span>
-        </div>
-
-        <div class="comic-grid">
-            @foreach($relatedkomiks as $related)
-                <div class="comic-item" onclick="location.href='{{ route('komik.show', $related->id) }}'">
-                   <img src="{{ $komik->cover_image }}" alt="{{ $komik->title }}" class="comic-cover img-fluid rounded shadow"
-                         alt="{{ $related->judul }}" 
-                         class="comic-cover">
-                    <div class="comic-info">
-                        <h6 class="comic-title">{{ $related->judul }}</h6>
-                        <div class="comic-meta">
-                            <span class="comic-rating">
-                                <i class="bi bi-star-fill"></i> {{ number_format($related->rating ?? 0, 1) }}
-                            </span>
-                            <span class="comic-chapter">Ch. {{ $related->latest_chapter }}</span>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-@endif
-
+    
 {{-- GANTI SELURUH BAGIAN KOMENTAR ANDA DENGAN INI --}}
 
 <div class="section-container">
@@ -268,37 +237,15 @@ Related Comics
     @endauth
 
     {{-- Daftar Komentar --}}
-    <div class="comments-list">
-        {{-- Gunakan @forelse untuk menangani kasus jika tidak ada komentar --}}
-        @forelse($komik->comments as $comment)
-            <div class="comment-item">
-                <div class="d-flex">
-                    <div class="comment-avatar me-3">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->name) }}&background=random" class="rounded-circle" width="40" height="40">
-                    </div>
-                    <div class="comment-content flex-grow-1">
-                        <div class="comment-header mb-2">
-                            <strong class="comment-author">
-                                {{-- Menampilkan nama user dari relasi --}}
-                                {{ $comment->user->username ?? 'Anonymous' }}
-                            </strong>
-                            <small class="text-muted ms-2">
-                                {{ $comment->created_at->diffForHumans() }}
-                            </small>
-                        </div>
-                        <div class="comment-text">
-                            {{ $comment->content }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @empty
-            {{-- Tampilan ini akan muncul jika $komik->comments kosong --}}
-            <div class="text-center py-4">
-                <p class="text-muted">No comments yet. Be the first to share your thoughts!</p>
-            </div>
-        @endforelse
+   <div class="comments-list">
+    @forelse($komik->comments as $comment)
+        @include('partials._comment_item', ['comment' => $comment])
+    @empty
+        {{-- ... Tampilan jika kosong ... --}}
+    @endforelse
     </div>
+
+    
 </div>
 <!-- STYLE -->
 <style>
