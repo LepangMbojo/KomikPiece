@@ -152,22 +152,27 @@
             gap: 20px;
         }
         
-        .comic-item {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-            border: 1px solid #444;
-        }
+       {{-- MENJADI SEPERTI INI --}}
+.comic-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    border: 1px solid #444;
+    text-decoration: none; /* Tambahan agar link tidak bergaris bawah */
+    color: white;          /* Tambahan agar teks link berwarna putih */
+    display: block;        /* Tambahan agar link mengisi ruang */
+}
+
+.comic-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(255, 87, 34, 0.3);
+    border-color: var(--primary-color);
+    color: white; /* Pastikan warna teks tetap saat di-hover */
+}
         
-        .comic-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255, 87, 34, 0.3);
-            border-color: var(--primary-color);
-        }
-        
-        .comic-cover {
+.comic-cover {
     width: 100%;
     /* HAPUS tinggi yang dipaksakan (height: 280px;) */
     
@@ -194,6 +199,9 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            line-height: 1.4em; /* Mengatur jarak tinggi per baris */
+            min-height: 2.8em;  /* Memaksa elemen untuk memiliki tinggi minimal 2 baris (2 x 1.4em) */
+    /* ================================================= */
         }
         
         .comic-meta {

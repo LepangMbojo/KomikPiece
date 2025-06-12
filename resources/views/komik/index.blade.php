@@ -15,25 +15,13 @@
             </div>
 
     <div class="comic-grid" id="popularGrid">
-        @forelse($popularKomiks as $komik)
-            <a href="{{ route('komik.show', $komik->id) }}" class="comic-item">
-                <img src="{{ $komik->cover_image }}" alt="{{ $komik->judul }}" class="comic-cover">
-                <div class="comic-info">
-                    <div class="comic-title">{{ $komik->judul }}</div>
-                    <div class="comic-meta">
-                        {{-- Kita bisa tampilkan jumlah views atau favorit di sini jika mau --}}
-                        <span><i class="bi bi-eye-fill"></i> {{ $komik->views }}</span>
-                        <span class="ms-2"><i class="bi bi-heart-fill"></i> {{ $komik->favorited_by_users_count }}</span>
-                    </div>
-                </div>
-            </a>
-        @empty
-            {{-- Tampilan ini akan muncul jika tidak ada komik populer --}}
-            <div class="empty-state">
-                <p class="text-muted">Belum ada komik populer saat ini.</p>
-            </div>
-        @endforelse
-            </div>
+       @forelse($popularKomiks as $komik)
+        <x-comic-card :komik="$komik" />
+    @empty
+        <div class="empty-state">
+            <p class="text-muted">Belum ada komik populer saat ini.</p>
+        </div>
+    @endforelse
         </div>
     </div>
 
@@ -47,34 +35,20 @@
             </div>
 
     <div class="comic-grid">
-               @forelse($komiks as $comic)
-    <div class="comic-item" onclick="location.href='{{ url('/komik/' . $comic->id) }}'">
-        <img src="{{ Storage::url($comic->cover) }}"  
-             alt="{{ $comic->judul }}" 
-             class="comic-cover">
-        <!-- <pre>{{ $comic->cover }}</pre> -->
-
-        <div class="comic-info">
-            <h6 class="comic-title">{{ $comic->judul }}</h6>
-            <div class="comic-meta">
-                <span class="comic-rating">
-                    <i class="bi bi-star-fill"></i> {{ $comic->rating ?? 0 }}
-                </span>
-               <span class="comic-chapter">
-                {{-- INI CARA MEMANGGIL YANG BENAR --}}
-                Ch. {{ $komik->chapters_max_chapter_number ?? 'Baru' }}
-            </span>
-            </div>
+    @forelse($komiks as $komik)
+        {{-- 
+          Memanggil komponen 'comic-card' dan mengirim data dari variabel $komik 
+          ke dalam komponen tersebut melalui prop :komik
+        --}}
+        <x-comic-card :komik="$komik" />
+    @empty
+        <div class="text-center py-5">
+            <i class="bi bi-book display-1 text-muted"></i>
+            <h5 class="mt-3 text-muted">Belum ada komik</h5>
+            <p class="text-muted">Belum ada komik yang tersedia</p>
         </div>
-    </div>
-@empty
-    <div class="text-center py-5">
-        <i class="bi bi-book display-1 text-muted"></i>
-        <h5 class="mt-3 text-muted">Belum ada komik</h5>
-        <p class="text-muted">Belum ada komik yang tersedia</p>
-    </div>
-@endforelse
-            </div>
+    @endforelse
+</div>
 
             <!-- Pagination -->
             @if(!isset($isDashboard) || !$isDashboard)
