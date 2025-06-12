@@ -216,7 +216,7 @@ class AdminController extends Controller
         $comic = Komik::findOrFail($id);
         
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             // Hapus semua file terkait
             if ($comic->cover && Storage::disk('public')->exists($comic->cover)) {
@@ -240,12 +240,12 @@ class AdminController extends Controller
             // Hapus dari database
             $comic->delete();
 
-            \DB::commit();
+            DB::commit();
 
             return redirect()->route('admin.comics')->with('success', 'Komik berhasil dihapus!');
 
         } catch (\Exception $e) {
-            \DB::rollback();
+            DB::rollback();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
@@ -356,7 +356,7 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users')->with('success', 'User berhasil dipromosikan menjadi admin!');
     }
-
+    
     public function demoteAdmin($id)
     {
         $user = User::findOrFail($id);

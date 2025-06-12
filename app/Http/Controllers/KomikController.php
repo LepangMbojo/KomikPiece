@@ -39,7 +39,7 @@ public function index()
     } else {
         // --- LOGIKA UNTUK HALAMAN UTAMA PUBLIK ---
         $komiks = KomikIndex::withMax('chapters', 'chapter_number')->latest()->paginate(12);
-        $popularKomiks = $this->getPopularComics(6);
+        $popularKomiks = $this->getPopularComics(5);
 //  dd($komiks->toArray());
         return view('komik.index', compact('komiks', 'popularKomiks'));
     }

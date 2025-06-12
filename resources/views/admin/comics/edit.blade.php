@@ -43,26 +43,34 @@
                                 <div class="row g-3">
                                     {{-- Semua input diisi dengan data yang ada: old('nama_field', $komik->nama_field) --}}
                                     <div class="col-12">
-                                        <label for="judul" class="form-label">Judul Komik *</label>
-                                        <input type="text" class="form-control" id="judul" name="judul" 
-                                               value="{{ old('judul', $komik->judul) }}" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="judul" class="form-label text-white">Judul Komik *</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="text" class="form-control bg-white text-black" id="judul" name="judul" 
+                                                    value="{{ old('judul', $komik->judul) }}" required>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <label for="author" class="form-label">Author *</label>
-                                        <input type="text" class="form-control" id="author" name="author" 
-                                               value="{{ old('author', $komik->author) }}" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="author" class="form-label text-white">Author *</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="text" class="form-control bg-white text-black" id="author" name="author" 
+                                                    value="{{ old('author', $komik->author) }}" required>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <label for="release_year" class="form-label">Tahun Rilis *</label>
-                                        <input type="number" class="form-control" id="release_year" name="release_year" 
-                                               min="1900" max="{{ date('Y') }}" value="{{ old('release_year', $komik->release_year) }}" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="release_year" class="form-label text-white">Tahun Rilis *</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="number" class="form-control bg-white text-black" id="release_year" name="release_year" 
+                                                    min="1900" max="{{ date('Y') }}" value="{{ old('release_year', $komik->release_year) }}" required>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <label for="status" class="form-label">Status *</label>
-                                        <select class="form-control" id="status" name="status" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="status" class="form-label text-white">Status *</label>
+                                        {{-- Added bg-white and text-black to select --}}
+                                        <select class="form-control bg-white text-black" id="status" name="status" required>
                                             <option value="">Pilih Status</option>
                                             <option value="ongoing" {{ old('status', $komik->status) == 'ongoing' ? 'selected' : '' }}>Ongoing</option>
                                             <option value="completed" {{ old('status', $komik->status) == 'completed' ? 'selected' : '' }}>Completed</option>
@@ -71,14 +79,18 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="rating" class="form-label">Rating</label>
-                                        <input type="number" class="form-control" id="rating" name="rating" 
-                                            step="0.1" min="0" max="10" value="{{ old('rating', $komik->rating) }}">
+                                        {{-- Added text-white to label --}}
+                                        <label for="rating" class="form-label text-white">Rating</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="number" class="form-control bg-white text-black" id="rating" name="rating" 
+                                                    step="0.1" min="0" max="10" value="{{ old('rating', $komik->rating) }}">
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <label for="language" class="form-label">Bahasa *</label>
-                                        <select class="form-control" id="language" name="language" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="language" class="form-label text-white">Bahasa *</label>
+                                        {{-- Added bg-white and text-black to select --}}
+                                        <select class="form-control bg-white text-black" id="language" name="language" required>
                                             <option value="">Pilih Bahasa</option>
                                             @foreach($languages as $language)
                                                 <option value="{{ $language }}" {{ old('language', $komik->language) == $language ? 'selected' : '' }}>
@@ -88,49 +100,53 @@
                                         </select>
                                     </div>
                                     
-                                   <div class="col-12">
-    <label class="form-label">Genres</label>
-    {{-- Wadah agar bisa di-scroll jika genrenya banyak --}}
-    <div class="p-3 border rounded" style="background-color: var(--card-bg); max-height: 200px; overflow-y: auto;">
-        <div class="row">
-            {{-- Loop semua genre yang ada dari database --}}
-            @foreach($genres as $genre)
-                <div class="col-md-4 col-sm-6">
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="checkbox"
-                            name="genres[]"  {{-- Tanda [] ini SANGAT PENTING agar data dikirim sebagai array --}}
-                            value="{{ $genre->id }}" {{-- Nilai yang dikirim adalah ID genre --}}
-                            id="genre-{{ $genre->id }}"
-                            {{-- Logika untuk memberi centang pada genre yang sudah dimiliki komik ini --}}
-                            @if(is_array(old('genres')) ? in_array($genre->id, old('genres')) : $komik->genres->contains($genre->id))
-                                checked 
-                            @endif
-                        >
-                        <label class="form-check-label" for="genre-{{ $genre->id }}">
-                            {{ $genre->name }}
-                        </label>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-    @error('genres')
-        <div class="text-danger small mt-1">{{ $message }}</div>
-    @enderror
-</div>
+                                    <div class="col-12">
+                                        {{-- Added text-white to label --}}
+                                        <label class="form-label text-white">Genres</label>
+                                        {{-- Wadah agar bisa di-scroll jika genrenya banyak --}}
+                                        <div class="p-3 border rounded" style="background-color: var(--card-bg); max-height: 200px; overflow-y: auto;">
+                                            <div class="row">
+                                                {{-- Loop semua genre yang ada dari database --}}
+                                                @foreach($genres as $genre)
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <div class="form-check">
+                                                            <input 
+                                                                class="form-check-input" 
+                                                                type="checkbox"
+                                                                name="genres[]"  {{-- Tanda [] ini SANGAT PENTING agar data dikirim sebagai array --}}
+                                                                value="{{ $genre->id }}" {{-- Nilai yang dikirim adalah ID genre --}}
+                                                                id="genre-{{ $genre->id }}"
+                                                                {{-- Logika untuk memberi centang pada genre yang sudah dimiliki komik ini --}}
+                                                                @if(is_array(old('genres')) ? in_array($genre->id, old('genres')) : $komik->genres->contains($genre->id))
+                                                                    checked 
+                                                                @endif
+                                                            >
+                                                            {{-- Added text-white to label --}}
+                                                            <label class="form-check-label text-white" for="genre-{{ $genre->id }}">
+                                                                {{ $genre->name }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        @error('genres')
+                                            <div class="text-danger small mt-1">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     
                                     <div class="col-12">
-                                        <label for="description" class="form-label">Deskripsi *</label>
-    <textarea class="form-control" id="description" name="description" rows="5" 
-              placeholder="Tulis sinopsis komik..." required>{{ old('description', $komik->description ?? '') }}</textarea>
-    <div class="form-text">Minimal 10 karakter</div>
+                                        {{-- Added text-white to label --}}
+                                        <label for="description" class="form-label text-white">Deskripsi *</label>
+                                        {{-- Added bg-white and text-black to textarea --}}
+                                        <textarea class="form-control bg-white text-black" id="description" name="description" rows="5" 
+                                                    placeholder="Tulis sinopsis komik..." required>{{ old('description', $komik->description ?? '') }}</textarea>
+                                        <div class="form-text">Minimal 10 karakter</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {{-- Bagian "Chapter Pertama" dihapus dari form edit --}}
+                        {{-- Bagian "Chapter Pertama" dihapus dari form edit (sudah benar) --}}
                     </div>
                     
                     <div class="col-md-4">
@@ -140,10 +156,11 @@
                             </div>
                             <div class="card-body text-center">
                                 <div class="mb-3">
-                                    <label for="cover" class="form-label">Upload Cover Baru (Opsional)</label>
-                                    {{-- 'required' dihapus dari input cover --}}
-                                    <input type="file" class="form-control" id="cover" name="cover" 
-                                           accept="image/*">
+                                    {{-- Added text-white to label --}}
+                                    <label for="cover" class="form-label text-white">Upload Cover Baru (Opsional)</label>
+                                    {{-- Added bg-white and text-black to input --}}
+                                    <input type="file" class="form-control bg-white text-black" id="cover" name="cover" 
+                                                accept="image/*">
                                     <div class="form-text">Format: JPG, PNG, GIF, WEBP. Max 5MB</div>
                                 </div>
                                 
