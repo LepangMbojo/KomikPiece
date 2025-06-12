@@ -266,7 +266,7 @@ class AdminController extends Controller
         
         $request->validate([
             'chapter_number' => 'required|integer|min:1|unique:chapters,chapter_number,NULL,id,komik_id,' . $comicId,
-            'chapter_title' => 'nullable|string|max:255',
+            'chapter_title' => 'required|string|max:255',
             'chapter_pages.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         ]);
 
