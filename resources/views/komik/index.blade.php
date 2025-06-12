@@ -46,12 +46,11 @@
     @endforelse
 </div>
 
-            <!-- Pagination -->
-            @if(!isset($isDashboard) || !$isDashboard)
+           
     <div class="d-flex justify-content-center mt-4">
         {{ $komiks->links() }}
     </div>
-@endif
+
         </div>
         <!-- Load More -->
         <div class="load-more">

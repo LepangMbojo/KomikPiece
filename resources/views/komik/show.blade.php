@@ -4,8 +4,7 @@
         :title="$komik->judul"
         :breadcrumbs="[
             ['name' => 'Home', 'url' => route('index')],
-            ['name' => 'Komiks', 'url' => route('index')],
-            ['name' => $komik->judul]
+            ['name' => 'Komiks', 'url' => route('index')]
         ]"
     />
 </x-slot>
@@ -134,25 +133,16 @@
             <div class="section-header">
                 <i class="bi bi-list-ol"></i>
                 <span>Chapters ({{ $komik->chapters->count() }})</span>
-                <div class="ms-auto">
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-outline-light btn-sm" onclick="sortChapters('asc')">
-                            <i class="bi bi-sort-numeric-down"></i> Oldest First
-                        </button>
-                        <button type="button" class="btn btn-outline-light btn-sm active" onclick="sortChapters('desc')">
-                            <i class="bi bi-sort-numeric-up"></i> Newest First
-                        </button>
-                    </div>
-                </div>
+
             </div>
 
             <!-- PERBAIKI BAGIAN CHAPTERS LIST -->
 <div class="chapters-list" id="chaptersList">
-    @forelse($komik->chapters ?? [] as $chapter)
-        <div class="chapter-item">
+    {{-- Tambahkan ->sortBy('chapter_number') untuk urutan ASC --}}
+    @forelse($komik->chapters->sortByDesc('chapter_number') as $chapter)
+        <div class="chapter-item" data-chapter-number="{{ $chapter->chapter_number }}">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <!-- PASTIKAN LINK INI BENAR -->
                     <a href="{{ route('komik.chapter', [$komik->id, $chapter->chapter_number]) }}" 
                        class="chapter-link text-decoration-none">
                         <h6 class="chapter-title mb-1">
