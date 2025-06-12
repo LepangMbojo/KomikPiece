@@ -64,11 +64,6 @@
 
             {{-- KOLOM KANAN: DESKRIPSI & MANAJEMEN CHAPTER --}}
             <div class="col-md-8">
-                <div class="section-container mb-4">
-                    <h5 class="mb-3"><i class="bi bi-text-left me-2"></i>Deskripsi</h5>
-                    <p style="white-space: pre-wrap;">{{ $komik->deskripsi }}</p>
-                </div>
-
                 <div class="section-container">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="mb-0"><i class="bi bi-list-ol me-2"></i>Daftar Chapter</h5>
@@ -92,7 +87,8 @@
                                 @forelse ($komik->chapters->sortByDesc('chapter_number') as $chapter)
                                     <tr>
                                         <th scope="row">{{ $chapter->chapter_number }}</th>
-                                        <td>{{ $chapter->title ?: '-' }}</td>
+                                        {{-- PERBAIKI DI SINI: UBAH $chapter->chapter_title MENJADI $chapter->title --}}
+                                        <td>{{ $chapter->title ?: '-' }}</td> 
                                         <td>{{ count($chapter->pages) }}</td>
                                         <td>{{ $chapter->created_at->format('d M Y') }}</td>
                                         <td class="text-end">
