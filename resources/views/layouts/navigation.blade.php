@@ -14,7 +14,9 @@
                 <a href="{{route('genre.index')}}" class="{{ request()->routeIs('genre.index') ? 'active' : '' }}">
                     <i class="bi bi-grid me-1"></i>Genres
                 </a>
-
+                <a class="nav-link {{ request()->routeIs('info.index') ? 'active' : '' }}" href="{{ route('info.index') }}">
+                    <i class="bi bi-info-circle me-1"></i>Tentang Kami
+                </a>
                 @auth
                     @if(auth()->user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.*') ? 'active' : '' }}">
