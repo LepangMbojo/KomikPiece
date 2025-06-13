@@ -369,4 +369,31 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users')->with('success', 'Admin berhasil diturunkan menjadi user!');
     }
+    
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Validasi request
+        $request->validate([
+            'is_banned' => 'required|boolean', // Memastikan nilai yang diterima adalah boolean
+        ]);
+
+        // Pencegahan: Admin tidak bisa membanned/mengunbanned dirinya sendiri
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Anda tidak bisa mengubah status ban akun Anda sendiri!');
+        }
+
+        try {
+            $user->update([
+                'is_banned' => $request->is_banned,
+            ]);
+
+            $message = $request->is_banned ? 'User berhasil di-ban!' : 'User berhasil di-unban!';
+            return redirect()->route('admin.users')->with('success', $message);
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui status user: ' . $e->getMessage());
+        }
+    }
 }

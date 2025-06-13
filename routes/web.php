@@ -91,6 +91,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::patch('/users/{id}/promote', [AdminController::class, 'promoteUser'])->name('users.promote');
     Route::patch('/users/{id}/demote', [AdminController::class, 'demoteAdmin'])->name('users.demote');
+    Route::post('/users/{id}/update-status', [AdminController::class, 'updateUser'])->name('users.updateStatus');
 });
 
 

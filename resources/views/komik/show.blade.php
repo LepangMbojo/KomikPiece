@@ -233,7 +233,6 @@
     </div>
 </x-app-layout>
 
-
 <script>
    document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('bookmark-btn');
