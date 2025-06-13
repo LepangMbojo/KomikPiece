@@ -8,7 +8,7 @@
 
             <!-- Navigation Menu -->
             <div class="nav-menu d-flex align-items-center gap-3">
-                <a href="{{ route('index') }}" class="{{ request()->routeIs('index') ? '' : '' }}">
+                <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" aria-current="page" href="{{ route('index') }}">
                     <i class="bi bi-house-door me-1"></i>Home
                 </a>
                 <a href="{{route('genre.index')}}" class="{{ request()->routeIs('genre.index') ? 'active' : '' }}">

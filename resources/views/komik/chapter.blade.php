@@ -66,7 +66,7 @@
             </div>
         </div>
 
-
+        <!-- Chapter Content -->
             <!-- Chapter Text Content (if any) -->
             @if($chapter->content)
                 <div class="chapter-text mb-4">
