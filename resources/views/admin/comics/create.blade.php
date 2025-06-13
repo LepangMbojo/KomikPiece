@@ -40,36 +40,55 @@
                             <div class="card-body">
                                 <div class="row g-3">
                                     <div class="col-12">
-                                        <label for="judul" class="form-label">Judul Komik *</label>
-                                        <input type="text" class="form-control" id="judul" name="judul" 
-                                               value="{{ old('judul') }}" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="judul" class="form-label text-white">Judul Komik *</label> 
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="text" class="form-control bg-white text-black" id="judul" name="judul" 
+                                                    value="{{ old('judul') }}" required>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <label for="author" class="form-label">Author *</label>
-                                        <input type="text" class="form-control" id="author" name="author" 
-                                               value="{{ old('author') }}" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="author" class="form-label text-white">Author *</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="text" class="form-control bg-white text-black" id="author" name="author" 
+                                                    value="{{ old('author') }}" required>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <label for="release_year" class="form-label">Tahun Rilis *</label>
-                                        <input type="number" class="form-control" id="release_year" name="release_year" 
-                                               min="1900" max="{{ date('Y') }}" value="{{ old('release_year', date('Y')) }}" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="release_year" class="form-label text-white">Tahun Rilis *</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="number" class="form-control bg-white text-black" id="release_year" name="release_year" 
+                                                    min="1900" max="{{ date('Y') }}" value="{{ old('release_year', date('Y')) }}" required>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <label for="status" class="form-label">Status *</label>
-                                        <select class="form-control" id="status" name="status" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="status" class="form-label text-white">Status *</label>
+                                        {{-- Added bg-white and text-black to select --}}
+                                        <select class="form-control bg-white text-black" id="status" name="status" required>
                                             <option value="">Pilih Status</option>
                                             <option value="ongoing" {{ old('status') == 'ongoing' ? 'selected' : '' }}>Ongoing</option>
                                             <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
                                             <option value="hiatus" {{ old('status') == 'hiatus' ? 'selected' : '' }}>Hiatus</option>
                                         </select>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        {{-- Added text-white to label --}}
+                                        <label for="rating" class="form-label text-white">Rating Awal</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="number" class="form-control bg-white text-black" id="rating" name="rating" 
+                                            step="0.1" min="0" max="10" value="{{ old('rating', 0) }}">
+                                    </div>
+
                                     
                                     <div class="col-md-6">
-                                        <label for="language" class="form-label">Bahasa *</label>
-                                        <select class="form-control" id="language" name="language" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="language" class="form-label text-white">Bahasa *</label>
+                                        {{-- Added bg-white and text-black to select --}}
+                                        <select class="form-control bg-white text-black" id="language" name="language" required>
                                             <option value="">Pilih Bahasa</option>
                                             @foreach($languages as $language)
                                                 <option value="{{ $language }}" {{ old('language') == $language ? 'selected' : '' }}>
@@ -80,28 +99,52 @@
                                     </div>
                                     
                                     <div class="col-md-12">
-                                        <label for="genre" class="form-label">Genre *</label>
-                                        <select class="form-control" id="genre" name="genre" required>
-                                            <option value="">Pilih Genre</option>
-                                            @foreach($genres as $genre)
-                                                <option value="{{ $genre }}" {{ old('genre') == $genre ? 'selected' : '' }}>
-                                                    {{ $genre }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        {{-- Added text-white to label --}}
+                                        <label class="form-label text-white">Genres</label>
+                                        {{-- Wadah agar bisa di-scroll jika genrenya banyak --}}
+                                        <div class="p-3 border rounded" style="background-color: var(--card-bg); max-height: 200px; overflow-y: auto;">
+                                            <div class="row">
+                                                {{-- Loop semua genre yang ada dari database --}}
+                                                @foreach($genres as $genre)
+                                                    <div class="col-md-4 col-sm-6">
+                                                        <div class="form-check">
+                                                            <input 
+                                                                class="form-check-input" 
+                                                                type="checkbox"
+                                                                name="genres[]"  {{-- Tanda [] ini SANGAT PENTING agar data dikirim sebagai array --}}
+                                                                value="{{ $genre->id }}" {{-- Nilai yang dikirim adalah ID genre --}}
+                                                                id="genre-{{ $genre->id }}"
+                                                                {{-- Logika untuk memberi centang pada genre yang sudah dimiliki komik ini --}}
+                                                                @if(is_array(old('genres')) && in_array($genre->id, old('genres')))
+                                                                    checked 
+                                                                @endif
+                                                            >
+                                                            {{-- Added text-white to label --}}
+                                                            <label class="form-check-label text-white" for="genre-{{ $genre->id }}">
+                                                                {{ $genre->name }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        @error('genres')
+                                            <div class="text-danger small mt-1">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     
                                     <div class="col-12">
-                                        <label for="deskripsi" class="form-label">Deskripsi *</label>
-                                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="5" 
-                                                  placeholder="Tulis sinopsis komik..." required>{{ old('deskripsi') }}</textarea>
+                                        {{-- Added text-white to label --}}
+                                        <label for="description" class="form-label text-white">Deskripsi *</label>
+                                        {{-- Added bg-white and text-black to textarea --}}
+                                        <textarea class="form-control bg-white text-black" id="description" name="description" rows="5" 
+                                                placeholder="Tulis sinopsis komik..." required>{{ old('description', $komik->description ?? '') }}</textarea>
                                         <div class="form-text">Minimal 10 karakter</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- First Chapter -->
                         <div class="card mb-4">
                             <div class="card-header">
                                 <h5 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Chapter Pertama</h5>
@@ -109,27 +152,32 @@
                             <div class="card-body">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label for="chapter_number" class="form-label">Nomor Chapter *</label>
-                                        <input type="number" class="form-control" id="chapter_number" name="chapter_number" 
-                                               min="1" value="{{ old('chapter_number', 1) }}" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="chapter_number" class="form-label text-white">Nomor Chapter *</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="number" class="form-control bg-white text-black" id="chapter_number" name="chapter_number" 
+                                                    min="1" value="{{ old('chapter_number', 1) }}" required>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        <label for="chapter_title" class="form-label">Judul Chapter</label>
-                                        <input type="text" class="form-control" id="chapter_title" name="chapter_title" 
-                                               value="{{ old('chapter_title') }}" placeholder="Opsional">
+                                        {{-- Added text-white to label --}}
+                                        <label for="chapter_title" class="form-label text-white">Judul Chapter</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="text" class="form-control bg-white text-black" id="chapter_title" name="chapter_title" 
+                                                    value="{{ old('chapter_title') }}" placeholder="Opsional">
                                     </div>
                                     
                                     <div class="col-12">
-                                        <label for="chapter_pages" class="form-label">Halaman Chapter *</label>
-                                        <input type="file" class="form-control" id="chapter_pages" name="chapter_pages[]" 
-                                               multiple accept="image/*" required>
+                                        {{-- Added text-white to label --}}
+                                        <label for="chapter_pages" class="form-label text-white">Halaman Chapter *</label>
+                                        {{-- Added bg-white and text-black to input --}}
+                                        <input type="file" class="form-control bg-white text-black" id="chapter_pages" name="chapter_pages[]" 
+                                                    multiple accept="image/*" required>
                                         <div class="form-text">
                                             Upload gambar halaman chapter. Format: JPG, PNG, GIF, WEBP. Max 10MB per file.
                                             <br>Tip: Urutkan file sesuai urutan halaman sebelum upload.
                                         </div>
                                         
-                                        <!-- Preview area -->
                                         <div id="pagesPreview" class="mt-3 row g-2"></div>
                                     </div>
                                 </div>
@@ -137,7 +185,6 @@
                         </div>
                     </div>
                     
-                    <!-- Cover Upload -->
                     <div class="col-md-4">
                         <div class="card">
                             <div class="card-header">
@@ -145,13 +192,14 @@
                             </div>
                             <div class="card-body text-center">
                                 <div class="mb-3">
-                                    <label for="cover" class="form-label">Upload Cover *</label>
-                                    <input type="file" class="form-control" id="cover" name="cover" 
-                                           accept="image/*" required>
+                                    {{-- Added text-white to label --}}
+                                    <label for="cover" class="form-label text-white">Upload Cover *</label>
+                                    {{-- Added bg-white and text-black to input --}}
+                                    <input type="file" class="form-control bg-white text-black" id="cover" name="cover" 
+                                                accept="image/*" required>
                                     <div class="form-text">Format: JPG, PNG, GIF, WEBP. Max 5MB</div>
                                 </div>
                                 
-                                <!-- Cover Preview -->
                                 <div id="coverPreview" class="mt-3">
                                     <div class="border rounded p-4 text-muted">
                                         <i class="bi bi-image display-4"></i>
@@ -163,7 +211,6 @@
                     </div>
                 </div>
                 
-                <!-- Submit Button -->
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
                         <i class="bi bi-save me-2"></i>Simpan Komik
@@ -177,6 +224,7 @@
     </div>
 
     <style>
+        /* This style block should ideally be moved to a dedicated CSS file */
         .preview-image {
             max-width: 100%;
             max-height: 300px;

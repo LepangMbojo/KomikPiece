@@ -9,23 +9,33 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Menampilkan form profil pengguna.
      */
     public function edit(Request $request): View
     {
+        // 1. Ambil data user yang sedang login
+        $user = $request->user();
+
+        // 2. Ambil data komik favorit milik user tersebut
+        $favoriteKomiks = $user->favorites()->latest()->paginate(12);
+
+        // 3. Kirim KEDUA variabel ('user' dan 'favoriteKomiks') ke view
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user, // <-- Variabel $user dikirim di sini
+            'favoriteKomiks' => $favoriteKomiks,
         ]);
     }
 
     /**
-     * Update the user's profile information.
+     * Update informasi profil pengguna.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        // ... (method ini tidak perlu diubah)
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -38,10 +48,11 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Hapus akun pengguna.
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // ... (method ini tidak perlu diubah)
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);

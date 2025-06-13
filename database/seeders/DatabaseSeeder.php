@@ -10,6 +10,7 @@ use App\Models\KomikIndex;
 use App\Models\Comments;
 
 
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -17,9 +18,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
+
+         $this->call([
             AdminSeeder::class,
-        ]);
+            GenreSeeder::class,
+            KomikSeeder::class,
+         ]);
+
         // User::factory(10)->create();
 
         // User::factory()->create([
@@ -27,25 +32,25 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-    $komiks = KomikIndex::factory(10)->create(); // Koleksi komik
-    $genres = Genre::factory(5)->create();       // Koleksi genre
-    $users  = User::factory(3)->create();        // Koleksi user
+    // $komiks = KomikIndex::factory(10)->create(); // Koleksi komik
+    // $genres = Genre::factory(5)->create();       // Koleksi genre
+    // $users  = User::factory(3)->create();        // Koleksi user
 
-    foreach ($komiks as $komik) {
-    // Random user sebagai favorit
-    $randomUser = $users->random();
-    $komik->favoredByUsers()->attach($randomUser->id);
+    // foreach ($komiks as $komik) {
+    // // Random user sebagai favorit
+    // $randomUser = $users->random();
+    // $komik->favoredByUsers()->attach($randomUser->id);
 
     // Beberapa genre acak
-    $randomGenres = $genres->random(rand(1, 3)); // 1 sampai 3 genre
-    foreach ($randomGenres as $genre) {
-        $komik->genres()->attach($genre->id);
+    // $randomGenres = $genres->random(rand(1, 3)); // 1 sampai 3 genre
+    // foreach ($randomGenres as $genre) {
+    //     $komik->genres()->attach($genre->id);
 
 
 
+    
     }
 }
-    }}
 
 
 

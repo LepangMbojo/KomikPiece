@@ -28,7 +28,7 @@ class KomikIndexFactory extends Factory
             'chapter' => fake()->numberBetween(1, 100),
             'status' => fake()->randomElement(['Ongoing', 'Completed']),
             'language' => fake()->randomElement(['English', 'Indonesian', 'Japanese']),
-            'deskripsi' => fake()->paragraph(),
+            'description' => fake()->paragraph(),
             'author' => fake()->name(),
             'created_at' => now(),
             'updated_at' => now(),

@@ -7,62 +7,114 @@ use App\Models\Genre;
 use App\Models\Chapter;
 use App\Models\Comments;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage; 
 
 
 class KomikController extends Controller
 {
-    public function index()
-    {
-        $komiks = KomikIndex::latest()->paginate(12);
-        return view('komik.index', compact('komiks'));
-    }
 
-    // Method baru untuk dashboard
-    public function dashboard()
-    {
-        $komiks = KomikIndex::orderBy('created_at', 'desc')->paginate(10);
-        $popularComics = KomikIndex::orderBy('views', 'desc')->take(8)->get();
+public function index()
+{
+    // Cek apakah ada pengguna yang sedang login
+    if (auth()->check()) {
+        // --- LOGIKA UNTUK DASHBOARD ---
         
-        // Anda bisa menambahkan data khusus untuk user yang login
+        // MENGGUNAKAN PAGINATE DI SINI SESUAI PERMINTAAN ANDA
+        $latestKomiks = KomikIndex::withMax('chapters', 'chapter_number')
+                                              ->latest()
+                                              ->paginate(10); // Jumlah item per halaman bisa disesuaikan
+
+        $popularKomiks = $this->getPopularComics(5);
         $user = auth()->user();
-        $bookmarkedComics = []; // Komik yang di-bookmark user
-        $recentlyRead = []; // Komik yang baru dibaca user
+        $bookmarkedComics = []; 
+        $recentlyRead = [];
         
-        return view('komik.index', compact('komiks', 'user', 'bookmarkedComics', 'recentlyRead', 'popularComics'));
+        return view('komik.index', [
+            'isDashboard'      => true,
+            'komiks'           => $latestKomiks,
+            'popularKomiks'    => $popularKomiks,
+            'user'             => $user,
+            'bookmarkedComics' => $bookmarkedComics,
+            'recentlyRead'     => $recentlyRead,
+        ]);
+
+    } else {
+        // --- LOGIKA UNTUK HALAMAN UTAMA PUBLIK (SUDAH BENAR) ---
+        $komiks = KomikIndex::withMax('chapters', 'chapter_number')
+                                        ->latest()
+                                        ->paginate(10);
+        
+        $popularKomiks = $this->getPopularComics(5);
+
+        return view('komik.index', compact('komiks', 'popularKomiks'));
     }
+}
+    /**
+     * Method pribadi untuk mengambil komik populer.
+     * Hanya bisa diakses dari dalam controller ini.
+     *
+     * @param int $limit Jumlah komik yang ingin diambil
+     * @return \Illuminate\Support\Collection
+     */
+    private function getPopularComics(int $limit)
+{
+    $potentiallyPopular = KomikIndex::query()
+        // TAMBAHKAN INI untuk mengambil chapter terbaru secara efisien
+        ->withMax('chapters', 'chapter_number')
+        // Jika Anda masih ingin menggunakan skor favorit, withCount ini juga diperlukan 
+        ->orderByDesc('views')
+        ->limit(100)
+        ->get();
 
-    public function show($id)
-    {
-        try {
-            $komik = KomikIndex::with(['chapters', 'comments.user'])->findOrFail($id);
+    // Hitung skor popularitas dan urutkan di PHP
+    return $potentiallyPopular->sortByDesc(function ($komik) {
+        // Rumus: (jumlah views) + (jumlah favorit * 50)
+        return $komik->views;
+    })->take($limit);
+}
+     
+   public function show($id)
+{
+    try {
+        $komik = KomikIndex::with(['chapters', 'comments.user','genres'])->findOrFail($id);
 
-            // Debug log
-            Log::info('Comic data: ', [ // Sekarang Log akan dikenali
-                'id' => $komik->id,
-                'judul' => $komik->judul,
-                'cover' => $komik->cover,
-                'cover_image' => $komik->cover_image, // Pastikan properti ini ada di model KomikIndex
-                'cover_exists' => $komik->cover_exists, // Pastikan properti ini ada di model KomikIndex
-                'storage_files' => Storage::disk('public')->files('covers') // Storage juga akan dikenali
-            ]);
+        // Increment views
+        $komik->increment('views');
 
-            // Increment views
-            $komik->increment('views');
+        // Get related komiks (nama variabel diperbaiki menjadi camelCase)
+       $relatedkomiks = KomikIndex::where('id', '!=', $id)
+                              // Tambahkan withCount untuk data yang dibutuhkan di kartu komik
+                            ->withCount(['chapters', 'comments'])
+                                          ->inRandomOrder()
+                                          ->limit(6)
+                                          ->get();
+// dd($komik->comments);
+// dd($komik->toArray());
+    // dd(get_class_methods($komik));
+        //    dd($komik->toArray());
 
-            // Get related komiks
-            $relatedkomiks = KomikIndex::where('id', '!=', $id)
-                                      ->limit(6)
-                                      ->get();
 
-            return view('komik.show', compact('komik', 'relatedkomiks'));
-
-        } catch (\Exception $e) {
-            Log::error('Comic show error: ' . $e->getMessage()); // Log akan dikenali
-            return redirect()->route('komik.index')->with('error', 'Comic not found');
+        // ===================================================================
+        // LOGIKA UNTUK MENGECEK STATUS FAVORIT (DITAMBAHKAN DI SINI)
+        // ===================================================================
+        $isFavorited = false; // Default-nya false
+        if (Auth::check()) {
+            // Jika user login, cek apakah komik ini ada di dalam relasi 'favorites' milik user
+            $isFavorited = Auth::user()->favorites()->where('komik_id', $komik->id)->exists();
         }
+        // ===================================================================
+
+        // Kirim semua variabel yang dibutuhkan ke view, termasuk 'isFavorited'
+        return view('komik.show', compact('komik', 'relatedkomiks', 'isFavorited'));
+
+    } catch (\Exception $e) {
+        Log::error('Comic show error: ' . $e->getMessage());
+        return redirect()->route('index')->with('error', 'Comic not found');
     }
+}
 
 
     public function search(Request $request)
@@ -70,8 +122,8 @@ class KomikController extends Controller
         $query = $request->get('q');
         $komiks = KomikIndex::where('judul', 'LIKE', "%{$query}%")
                       ->orWhere('author', 'LIKE', "%{$query}%")
-                      ->orWhere('deskripsi', 'LIKE', "%{$query}%")
-                      ->paginate(12);
+                      ->orWhere('description', 'LIKE', "%{$query}%")
+                      ->paginate(10);
         return view('komik.search', compact('komiks', 'query'));
     }
 
@@ -90,17 +142,21 @@ class KomikController extends Controller
         return view('komik.chapter', compact('komik', 'chapter'));
     }
     
-    public function storeComment(Request $request, $id)
-{
+    // Anda bisa menggunakan Route Model Binding untuk kode yang lebih bersih
+    // Pastikan di routes/web.php Anda menggunakan {komik} bukan {id}
+    // Contoh: Route::post('/komik/{komik}/comments', ...)
+
+    public function storeComment(Request $request, \App\Models\KomikIndex $komik)
+    {
     $request->validate([
         'content' => 'required|string|min:3|max:1000'
     ]);
 
-    $komik = KomikIndex::findOrFail($id);
-
-    Comments::create([
-        'user_id' => auth()->id(),
-        'komik_id' => $komik->id,
+    // Gunakan relasi untuk membuat komentar baru.
+    // 'komik_id' akan diisi secara otomatis oleh Laravel.
+    // Anda tidak perlu lagi mendaftarkan 'komik_id' di $fillable pada model Comments.
+    $komik->comments()->create([
+        'user_id' => auth()->id(), // 'user_id' dan 'content' tetap perlu ada di $fillable
         'content' => $request->content
     ]);
 

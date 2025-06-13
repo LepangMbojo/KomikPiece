@@ -6,6 +6,8 @@ use App\Http\Controllers\KomikController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\InfoController;
 
 
 /*
@@ -33,8 +35,10 @@ Route::get('/komik/{id}/chapter/{chapter}', [KomikController::class, 'showChapte
 
 // Rute untuk genre
 Route::get('/genres', [GenreController::class, 'index'])->name('genre.index');
-// Route.get('/genre/{slug}', [GenreController::class, 'show'])->name('comics.genre');
+Route::get('/genre/{slug}', [GenreController::class, 'show'])->name('comics.genre');
 
+// Rute untuk halaman tentang
+Route::get('/about', [InfoController::class, 'index'])->name('info.index');
 // Rute untuk memuat lebih banyak komentar (jika menggunakan AJAX/fetch)
 Route::get('/komik/{komik}/comments/load-more', [CommentController::class, 'loadMore'])->name('komik.comments.load-more');
 
@@ -51,6 +55,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Favorite
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/{komik}/add', [FavoriteController::class, 'add'])->name('favorites.add');
+    Route::delete('/favorites/{komik}/remove', [FavoriteController::class, 'remove'])->name('favorites.remove');
 
     // Menyimpan komentar (menggunakan route model binding {komik})
     Route::post('/komik/{komik}/comments', [CommentController::class, 'store'])->name('komik.comments.store');
@@ -85,6 +94,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::patch('/users/{id}/promote', [AdminController::class, 'promoteUser'])->name('users.promote');
     Route::patch('/users/{id}/demote', [AdminController::class, 'demoteAdmin'])->name('users.demote');
+    Route::post('/users/{id}/update-status', [AdminController::class, 'updateUser'])->name('users.updateStatus');
 });
 
 

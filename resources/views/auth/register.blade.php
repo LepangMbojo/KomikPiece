@@ -2,18 +2,18 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
-        <h2 class="mb-4 text-center">Buat Akun Baru</h2>
+        <h2 class="mb-4 text-center text-orange-500 text-2xl font-bold">Buat Akun Baru</h2>
 
         <!-- Username -->
         <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
+            <label for="username" class="form-label text-white">Username</label>
             <div class="input-group">
-                <span class="input-group-text">
+                <span class="input-group-text bg-dark text-white">
                     <i class="bi bi-person"></i>
                 </span>
-                <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" 
-                       name="username" value="{{ old('username') }}" required autofocus autocomplete="username" 
-                       placeholder="Username unik Anda">
+                <input id="username" type="text" class="form-control bg-white text-black @error('username') is-invalid @enderror" 
+                    name="username" value="{{ old('username') }}" required autofocus autocomplete="username" 
+                    placeholder="Username unik Anda">
             </div>
             @error('username')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -22,14 +22,14 @@
 
         <!-- Email Address -->
         <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
+            <label for="email" class="form-label text-white">Email</label>
             <div class="input-group">
-                <span class="input-group-text">
+                <span class="input-group-text bg-dark text-white">
                     <i class="bi bi-envelope"></i>
                 </span>
-                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" 
-                       name="email" value="{{ old('email') }}" required autocomplete="username" 
-                       placeholder="email@example.com">
+                <input id="email" type="email" class="form-control bg-white text-black @error('email') is-invalid @enderror" 
+                    name="email" value="{{ old('email') }}" required autocomplete="username" 
+                    placeholder="email@example.com">
             </div>
             @error('email')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -38,15 +38,15 @@
 
         <!-- Password -->
         <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label text-white">Password</label>
             <div class="input-group">
-                <span class="input-group-text">
+                <span class="input-group-text bg-dark text-white">
                     <i class="bi bi-lock"></i>
                 </span>
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" 
+                <input id="password" type="password" class="form-control bg-white text-black @error('password') is-invalid @enderror" 
                        name="password" required autocomplete="new-password" placeholder="Minimal 8 karakter">
-                <span class="input-group-text password-toggle" onclick="togglePassword('password', 'iconPassword')">
-                    <i class="bi bi-eye" id="iconPassword"></i>
+                <span class="input-group-text password-toggle bg-dark text-white" onclick="togglePassword('password', 'iconPassword')">
+                    <i class="bi bi-eye" id="iconPassword" style="cursor: pointer;"></i>
                 </span>
             </div>
             @error('password')
@@ -56,17 +56,17 @@
 
         <!-- Confirm Password -->
         <div class="mb-4">
-            <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+            <label for="password_confirmation" class="form-label text-white">Konfirmasi Password</label>
             <div class="input-group">
-                <span class="input-group-text">
+                <span class="input-group-text bg-dark text-white">
                     <i class="bi bi-lock-fill"></i>
                 </span>
                 <input id="password_confirmation" type="password" 
-                       class="form-control @error('password_confirmation') is-invalid @enderror" 
+                       class="form-control bg-white text-black @error('password_confirmation') is-invalid @enderror" 
                        name="password_confirmation" required autocomplete="new-password" 
                        placeholder="Ulangi password Anda">
-                <span class="input-group-text password-toggle" onclick="togglePassword('password_confirmation', 'iconPasswordConfirm')">
-                    <i class="bi bi-eye" id="iconPasswordConfirm"></i>
+                <span class="input-group-text password-toggle bg-dark text-white" onclick="togglePassword('password_confirmation', 'iconPasswordConfirm')">
+                    <i class="bi bi-eye" id="iconPasswordConfirm" style="cursor: pointer;"></i>
                 </span>
             </div>
             @error('password_confirmation')

@@ -15,12 +15,13 @@ class Genre extends Model
     use HasFactory;
 
     protected $table = 'genres';
+    
+    protected $fillable = ['name', 'slug', 'description'];
 
     public function komiks()
     {
         return $this->belongsToMany(KomikIndex::class, 'genre_komik', 'genre_id', 'komik_id');
     }
-    protected $fillable = ['name', 'slug', 'description'];
 
     /**
      * Boot the model.
