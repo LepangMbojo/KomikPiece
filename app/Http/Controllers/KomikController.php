@@ -21,8 +21,13 @@ public function index()
     // Cek apakah ada pengguna yang sedang login
     if (auth()->check()) {
         // --- LOGIKA UNTUK DASHBOARD ---
-        $latestKomiks = KomikIndex::withMax('chapters', 'chapter_number')->latest()->paginate(12);
-        $popularKomiks = $this->getPopularComics(6); // Memanggil helper method
+        
+        // MENGGUNAKAN PAGINATE DI SINI SESUAI PERMINTAAN ANDA
+        $latestKomiks = KomikIndex::withMax('chapters', 'chapter_number')
+                                              ->latest()
+                                              ->paginate(10); // Jumlah item per halaman bisa disesuaikan
+
+        $popularKomiks = $this->getPopularComics(5);
         $user = auth()->user();
         $bookmarkedComics = []; 
         $recentlyRead = [];
@@ -37,10 +42,13 @@ public function index()
         ]);
 
     } else {
-        // --- LOGIKA UNTUK HALAMAN UTAMA PUBLIK ---
-        $komiks = KomikIndex::withMax('chapters', 'chapter_number')->latest()->paginate(12);
+        // --- LOGIKA UNTUK HALAMAN UTAMA PUBLIK (SUDAH BENAR) ---
+        $komiks = KomikIndex::withMax('chapters', 'chapter_number')
+                                        ->latest()
+                                        ->paginate(10);
+        
         $popularKomiks = $this->getPopularComics(5);
-//  dd($komiks->toArray());
+
         return view('komik.index', compact('komiks', 'popularKomiks'));
     }
 }
@@ -52,18 +60,21 @@ public function index()
      * @return \Illuminate\Support\Collection
      */
     private function getPopularComics(int $limit)
-    {
-        $potentiallyPopular = KomikIndex::query() // Menghitung jumlah favorit
-            ->orderByDesc('views')          // Pra-filter berdasarkan views
-            ->limit(100)                    // Ambil 100 kandidat teratas
-            ->get();
+{
+    $potentiallyPopular = KomikIndex::query()
+        // TAMBAHKAN INI untuk mengambil chapter terbaru secara efisien
+        ->withMax('chapters', 'chapter_number')
+        // Jika Anda masih ingin menggunakan skor favorit, withCount ini juga diperlukan 
+        ->orderByDesc('views')
+        ->limit(100)
+        ->get();
 
-        // Hitung skor popularitas dan urutkan di PHP
-        return $potentiallyPopular->sortByDesc(function ($komik) {
-            // Rumus: (jumlah views) + (jumlah favorit * 50)
-            return $komik->views;
-        })->take($limit); // Ambil sejumlah $limit teratas setelah diurutkan
-    }
+    // Hitung skor popularitas dan urutkan di PHP
+    return $potentiallyPopular->sortByDesc(function ($komik) {
+        // Rumus: (jumlah views) + (jumlah favorit * 50)
+        return $komik->views;
+    })->take($limit);
+}
      
    public function show($id)
 {
@@ -112,7 +123,7 @@ public function index()
         $komiks = KomikIndex::where('judul', 'LIKE', "%{$query}%")
                       ->orWhere('author', 'LIKE', "%{$query}%")
                       ->orWhere('description', 'LIKE', "%{$query}%")
-                      ->paginate(12);
+                      ->paginate(10);
         return view('komik.search', compact('komiks', 'query'));
     }
 

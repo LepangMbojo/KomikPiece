@@ -1,3 +1,864 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+        :root {
+            --primary-color: #FF5722;
+            --dark-color: #1a1a1a;
+            --darker-color: #0d0d0d;
+            --card-bg: #2a2a2a;
+            --section-bg: #1e1e1e;
+        }
+        
+        body {
+            background-color: var(--darker-color);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-custom {
+            background-color: var(--dark-color);
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .navbar-brand {
+            color: var(--primary-color) !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .search-btn {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-right: 15px;
+        }
+        
+        .search-btn:hover {
+            background-color: #e64a19;
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin: 0 20px;
+        }
+        
+        .nav-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+        
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--primary-color);
+        }
+        
+        .right-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-login {
+            background: transparent;
+            border: 1px solid #555;
+            color: #ffffff;
+            padding: 6px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-login:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-register {
+            background-color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-register:hover {
+            background-color: #e64a19;
+            border-color: #e64a19;
+        }
+        
+        /* Dark Section Background */
+        .section-container {
+            background-color: var(--section-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-spacing {
+            margin-bottom: 50px; /* Spacing tambahan antar section */
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .section-header i {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+        
+        .comic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+
+    .comic-card {
+        background-color: var(--card-bg);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        border: 1px solid #444;
+        text-decoration: none; /* Tambahan agar link tidak bergaris bawah */
+        color: white;          /* Tambahan agar teks link berwarna putih */
+        display: block;        /* Tambahan agar link mengisi ruang */
+    }
+
+    .comic-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(255, 87, 34, 0.3);
+        border-color: var(--primary-color);
+        color: white; /* Pastikan warna teks tetap saat di-hover */
+    }
+            
+    .comic-cover {
+        width: 100%;
+        /* HAPUS tinggi yang dipaksakan (height: 280px;) */
+        
+        aspect-ratio: 2 / 3; /* KUNCI UTAMA: Atur rasio aspek wadah agar seperti komik (2 lebar banding 3 tinggi) */
+                            /* Anda bisa coba juga rasio lain seperti 3/4 atau 66/100 jika lebih pas */
+
+        object-fit: cover; /* Tetap gunakan 'cover' agar jika ada sedikit perbedaan, gambar tetap mengisi penuh */
+        display: block;
+        background-color: #1a1a1a;
+    }
+            
+        .comic-info {
+            padding: 15px;
+            background-color: var(--card-bg);
+        }
+        
+        .comic-title {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            color: #ffffff;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4em; /* Mengatur jarak tinggi per baris */
+            min-height: 2.8em;  /* Memaksa elemen untuk memiliki tinggi minimal 2 baris (2 x 1.4em) */
+    /* ================================================= */
+        }
+        
+        .comic-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .comic-rating {
+            color: #ffc107;
+        }
+        
+        .comic-chapter {
+            color: var(--primary-color);
+        }
+        
+        .search-input {
+            background-color: var(--card-bg);
+            border: 1px solid #555;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+        
+        .search-input:focus {
+            background-color: var(--card-bg);
+            border-color: var(--primary-color);
+            color: #ffffff;
+            box-shadow: 0 0 0 0.2rem rgba(255, 87, 34, 0.25);
+        }
+        
+        .search-input::placeholder {
+            color: #aaa;
+        }
+        
+        .load-more {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .btn-load-more {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-load-more:hover {
+            background-color: #e64a19;
+            transform: translateY(-2px);
+        }
+        
+        /* Additional dark styling for better contrast */
+        .section-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 87, 34, 0.05) 0%, rgba(0, 0, 0, 0.1) 100%);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+        
+        .section-container {
+            position: relative;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background-color: var(--section-bg);
+            border-bottom: 1px solid #333;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header h1,
+        .page-header h2 {
+            color: #ffffff;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* Main Content */
+        main {
+            min-height: calc(100vh - 76px); /* Adjust based on navbar height */
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        /* Content sections */
+        .content-section {
+            background-color: var(--section-bg);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid #444;
+            border-radius: 8px;
+        }
+
+        .card-header {
+            background-color: var(--dark-color);
+            border-bottom: 1px solid #444;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .card-body {
+            color: #ffffff;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #e64a19;
+            border-color: #e64a19;
+        }
+
+        /* Tables */
+        .table-dark {
+            background-color: var(--card-bg);
+            border: 1px solid #444;
+        }
+
+        .table-dark th {
+            background-color: var(--dark-color);
+            border-color: #444;
+            color: var(--primary-color);
+        }
+
+        .table-dark td {
+            border-color: #444;
+        }
+
+        /* Forms */
+        .form-control {
+            background-color: var(--card-bg);
+            border: 2px solid #444;
+            color: #ffffff;
+        }
+
+        .form-control:focus {
+            background-color: var(--card-bg);
+            border-color: var(--primary-color);
+            color: #ffffff;
+            box-shadow: 0 0 0 0.2rem rgba(255, 87, 34, 0.25);
+        }
+
+        .form-label {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Alerts */
+        .alert {
+            border-radius: 8px;
+            border: none;
+        }
+
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            border: 1px solid #28a745;
+            color: #4caf50;
+        }
+
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            border: 1px solid #dc3545;
+            color: #ff6b6b;
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            color: #ffc107;
+        }
+
+        .alert-info {
+            background-color: rgba(13, 202, 240, 0.1);
+            border: 1px solid #0dcaf0;
+            color: #0dcaf0;
+        }
+
+        /* Links */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #e64a19;
+        }
+
+
+        /* =============================================== */
+/* KUSTOMISASI STYLE PAGINASI BOOTSTRAP            */
+/* =============================================== */
+
+/* Mengubah warna background dan border utama */
+.pagination {
+    --bs-pagination-bg: var(--card-bg);
+    --bs-pagination-border-color: #444;
+    --bs-pagination-disabled-bg: #222;
+    --bs-pagination-disabled-border-color: #444;
+}
+
+/* Mengubah warna teks dan ikon (seperti < dan >) */
+.pagination .page-link {
+    color: #ccc;
+}
+.pagination .page-link:hover {
+    background-color: #333;
+    color: white;
+}
+.pagination .page-item.disabled .page-link {
+    color: #666;
+}
+
+/* Mengubah warna halaman yang sedang aktif */
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+.pagination .page-item.active .page-link:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Menghapus fokus bayangan biru yang mengganggu */
+.pagination .page-link:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 87, 34, 0.25);
+}
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .comic-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .comic-cover {
+                height: 220px;
+            }
+            
+            .section-container {
+                padding: 20px;
+                margin: 20px 0;
+            }
+            
+            .content-section {
+                padding: 20px;
+                margin: 15px 0;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .comic-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .comic-cover {
+                height: 200px;
+            }
+            
+            .comic-info {
+                padding: 10px;
+            }
+            
+            .section-container {
+                padding: 15px;
+                margin: 15px 0;
+            }
+        }
+
+
+    :root {
+        --card-bg: #1e1e1e;
+        --primary-color: #ff5722;
+        --dark-color: #121212;
+    }
+
+    body {
+        color: #f8f9fa;
+    }
+
+    .text-muted {
+        color: #bbb !important;
+    }
+
+    .text-white-50 {
+        color: rgba(255, 255, 255, 0.75) !important;
+    }
+
+    .komik-cover {
+        width: 100%;
+        max-width: 250px;
+        height: 350px;
+        object-fit: cover;
+        border: 2px solid #444;
+    }
+
+    .meta-item, .chapter-item, .comment-form, .comment-item {
+        background-color: var(--card-bg);
+        border: 1px solid #444;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .meta-label {
+        color: #aaa;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .meta-value, .chapter-title {
+        color: #fff;
+        font-weight: 500;
+    }
+
+    .chapter-link {
+        color: inherit;
+    }
+
+    .chapter-link:hover .chapter-title {
+        color: var(--primary-color);
+    }
+
+    .comment-author {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .comment-text {
+        color: #ccc;
+        line-height: 1.6;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    .comment-avatar {
+        flex-shrink: 0;
+    }
+
+    .avatar-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--dark-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #444;
+    }
+
+    .comment-header {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+    .comments-list {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .comments-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .comments-list::-webkit-scrollbar-thumb {
+        background: #444;
+        border-radius: 3px;
+    }
+
+    .comments-list::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-color);
+    }
+
+    .comment-item:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 87, 34, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .form-control.bg-dark {
+        color: #f8f9fa !important;
+        background-color: #343a40 !important;
+        border-color: #555 !important;
+    }
+
+    .form-control::placeholder {
+        color: #888 !important;
+    }
+
+    .form-control:focus {
+        background-color: #3d444a !important;
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 0.25rem rgba(255, 87, 34, 0.25) !important;
+    }
+
+    @media (max-width: 768px) {
+        .komik-cover {
+            max-width: 200px;
+            height: 280px;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .comment-avatar {
+            display: none;
+        }
+
+        .comment-form {
+            padding: 15px;
+        }
+    }
+
+
+        :root {
+            --primary-color: #FF5722;
+            --dark-color: #1a1a1a;
+            --darker-color: #0d0d0d;
+            --card-bg: #2a2a2a;
+            --section-bg: #1e1e1e;
+        }
+
+        body {
+            font-family: 'Figtree', sans-serif;
+            background-color: var(--darker-color);
+            color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            background: linear-gradient(135deg, var(--darker-color) 0%, var(--dark-color) 100%);
+        }
+
+        .auth-card {
+            background-color: var(--section-bg);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 87, 34, 0.05) 0%, rgba(0, 0, 0, 0.1) 100%);
+            border-radius: 15px;
+            pointer-events: none;
+        }
+
+        .auth-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-logo {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        /* Form Elements */
+        .form-label {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            background-color: var(--card-bg);
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 16px;
+            color: #ffffff;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            background-color: var(--card-bg);
+            border-color: var(--primary-color);
+            color: #ffffff;
+            box-shadow: 0 0 0 0.2rem rgba(255, 87, 34, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #888;
+        }
+
+        .form-control.is-valid {
+            border-color: #28a745;
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+
+        /* Input Groups */
+        .input-group-text {
+            background-color: var(--card-bg);
+            border: 2px solid #444;
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+            color: #aaa;
+        }
+
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .input-group:focus-within .input-group-text {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .password-toggle {
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.3s;
+            background-color: var(--card-bg);
+            border: 2px solid #444;
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #e64a19;
+            border-color: #e64a19;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 87, 34, 0.3);
+        }
+
+        /* Links */
+        a, a:hover {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #e64a19;
+        }
+
+        .text-light {
+            color: #aaa !important;
+        }
+
+        .text-light:hover {
+            color: var(--primary-color) !important;
+        }
+
+        /* Validation Feedback */
+        .invalid-feedback {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .valid-feedback {
+            color: #4caf50;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Headers */
+        h1, h2, h3, h4, h5, h6 {
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .auth-wrapper {
+                padding: 1rem 0.5rem;
+            }
+            
+            .auth-card {
+                padding: 30px 25px;
+            }
+            
+            .brand-logo {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }

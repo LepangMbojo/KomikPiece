@@ -9,9 +9,8 @@
                 <i class="bi bi-star-fill"></i> {{ $komik->rating ?? 0 }}
             </span>
             <span class="comic-chapter">
-                {{-- Gunakan chapters_count yang lebih efisien --}}
-                Ch. {{ $komik->chapters_count ?? 0 }}
-            </span>
+    Ch. {{ $komik->chapters_max_chapter_number ?? 0 }}
+</span>
         </div>
     </div>
 </a>
