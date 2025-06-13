@@ -56,28 +56,14 @@
         </div>
     </form>
 
-<<<<<<< HEAD
     <script>
         function togglePasswordCheckbox(fieldId) {
             const field = document.getElementById(fieldId);
             if (field.type === "password") {
-=======
-    <!-- Script toggle password -->
-    <script>
-        function togglePasswordCheckbox(fieldId) {
-            const field = document.getElementById(fieldId);
-            const checkbox = document.getElementById('show_password');
-
-            if (checkbox.checked) {
->>>>>>> ec888fdcf14b9edaa8c43bfa203dcb335d8fed73
                 field.type = "text";
             } else {
                 field.type = "password";
             }
         }
     </script>
-<<<<<<< HEAD
 </x-guest-layout>
-=======
-</x-guest-layout>
->>>>>>> ec888fdcf14b9edaa8c43bfa203dcb335d8fed73
