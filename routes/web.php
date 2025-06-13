@@ -7,6 +7,7 @@ use App\Http\Controllers\GenreController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\InfoController;
 
 
 /*
@@ -36,6 +37,8 @@ Route::get('/komik/{id}/chapter/{chapter}', [KomikController::class, 'showChapte
 Route::get('/genres', [GenreController::class, 'index'])->name('genre.index');
 Route::get('/genre/{slug}', [GenreController::class, 'show'])->name('comics.genre');
 
+// Rute untuk halaman tentang
+Route::get('/about', [InfoController::class, 'index'])->name('info.index');
 // Rute untuk memuat lebih banyak komentar (jika menggunakan AJAX/fetch)
 Route::get('/komik/{komik}/comments/load-more', [CommentController::class, 'loadMore'])->name('komik.comments.load-more');
 
