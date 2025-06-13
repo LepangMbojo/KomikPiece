@@ -145,7 +145,6 @@
                         </h6>
                         <small class="text-muted">
                             <i class="bi bi-calendar me-1"></i>{{ $chapter->created_at->format('M d, Y') }}
-                            <i class="bi bi-eye ms-3 me-1"></i>{{ number_format($chapter->views ?? 0) }} views
                         </small>
                     </a>
                 </div>
