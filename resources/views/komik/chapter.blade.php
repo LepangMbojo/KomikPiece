@@ -66,20 +66,6 @@
             </div>
         </div>
 
-        <!-- Chapter Content -->
-        <div class="chapter-content">
-            <div class="chapter-header text-center mb-4">
-                <h1 class="chapter-title">Chapter {{ $chapter->chapter_number }}</h1>
-                @if($chapter->title)
-                    <h2 class="chapter-subtitle">{{ $chapter->title }}</h2>
-                @endif
-                <div class="chapter-meta mt-2">
-                    <small class="text-muted">
-                        <i class="bi bi-calendar me-1"></i>{{ $chapter->created_at ? $chapter->created_at->format('M d, Y') : 'Unknown date' }}
-                        <i class="bi bi-eye ms-3 me-1"></i>{{ number_format($chapter->views ?? 0) }} views
-                    </small>
-                </div>
-            </div>
 
             <!-- Chapter Text Content (if any) -->
             @if($chapter->content)
@@ -97,11 +83,12 @@
                     @foreach($chapter->pages_url as $page_url)
                         <div class="chapter-image mb-3 text-center">
                             {{-- $page_url sudah berisi URL yang siap pakai atau URL placeholder dari accessor --}}
-                            <img src="{{ $page_url }}"
-                                 alt="Page {{ $loop->iteration }}"
-                                 class="img-fluid chapter-page"
-                                 loading="lazy"
-                                 onerror="this.onerror=null; this.src='{{ asset('/placeholder.svg?height=800&width=600&text=Error+Loading+Page') }}'; this.nextElementSibling.style.display='block';">
+                           <img src="{{ $page_url }}"
+                            alt="Page {{ $loop->iteration }}"
+                            class="img-fluid chapter-page"
+                            loading="lazy"
+                            onerror="..."
+                            oncontextmenu="return false;"> {{-- TAMBAHKAN INI --}}
                             <div class="image-error" style="display: none;">
                                 <div class="alert alert-warning">
                                     <i class="bi bi-exclamation-triangle"></i>

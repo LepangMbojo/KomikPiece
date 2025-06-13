@@ -911,20 +911,25 @@
         }
 
         .chapter-page {
-        display: block; /* Pastikan gambar adalah elemen block */
-        width: 100%;    /* Buat gambar selalu memenuhi lebar kontainer .chapter-image */
-                       /* Jika Anda lebih suka gambar tidak meregang jika aslinya kecil, 
-                          gunakan max-width: 100%; seperti yang sudah ada */
-        height: auto;   /* Pertahankan rasio aspek gambar */
-        margin-left: auto;  /* Tengahkan gambar jika display block */
-        margin-right: auto; /* Tengahkan gambar jika display block */
-        
-        /* Gaya Anda yang sudah ada */
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease;
-        cursor: pointer;
-    }
+            display: block;
+            width: 100%;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+            /* ======================================================== */
+            /* TAMBAHKAN BLOK INI UNTUK MEMBUAT GAMBAR TIDAK INTERAKTIF */
+            /* ======================================================== */
+            cursor: default; /* Mengubah kursor kembali menjadi panah biasa */
+            pointer-events: none; /* Ini yang paling kuat, membuat elemen diabaikan oleh pointer */
+            -webkit-user-select: none; /* Mencegah seleksi di Chrome, Safari */
+            -moz-user-select: none;    /* Mencegah seleksi di Firefox */
+            -ms-user-select: none;     /* Mencegah seleksi di IE/Edge */
+            user-select: none;         /* Standar untuk mencegah seleksi */
+            -webkit-user-drag: none;   /* Mencegah drag di Chrome, Safari */
+        }
 
         /* .chapter-page:hover {
             transform: scale(1.02);
