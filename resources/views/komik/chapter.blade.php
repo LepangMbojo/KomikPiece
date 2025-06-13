@@ -67,20 +67,6 @@
         </div>
 
         <!-- Chapter Content -->
-        <div class="chapter-content">
-            <div class="chapter-header text-center mb-4">
-                <h1 class="chapter-title">Chapter {{ $chapter->chapter_number }}</h1>
-                @if($chapter->title)
-                    <h2 class="chapter-subtitle">{{ $chapter->title }}</h2>
-                @endif
-                <div class="chapter-meta mt-2">
-                    <small class="text-muted">
-                        <i class="bi bi-calendar me-1"></i>{{ $chapter->created_at ? $chapter->created_at->format('M d, Y') : 'Unknown date' }}
-                        <i class="bi bi-eye ms-3 me-1"></i>{{ number_format($chapter->views ?? 0) }} views
-                    </small>
-                </div>
-            </div>
-
             <!-- Chapter Text Content (if any) -->
             @if($chapter->content)
                 <div class="chapter-text mb-4">
