@@ -9,7 +9,7 @@
     <div class="container py-4">
         <!-- Stats Cards -->
         <div class="row g-4 mb-4">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card bg-primary text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
@@ -25,7 +25,7 @@
                 </div>
             </div>
             
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card bg-success text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
@@ -41,7 +41,7 @@
                 </div>
             </div>
             
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card bg-warning text-white">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
@@ -56,55 +56,48 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="col-md-3">
-                <div class="card bg-info text-white">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h5 class="card-title">Quick Actions</h5>
-                                <a href="{{ route('admin.comics.create') }}" class="btn btn-light btn-sm">
-                                    <i class="bi bi-plus"></i> Add Comic
-                                </a>
-                            </div>
-                            <div class="align-self-center">
-                                <i class="bi bi-lightning fs-1"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Quick Actions -->
         <div class="section-container mb-4">
-            <div class="section-header">
-                <i class="bi bi-lightning"></i>
-                <span>Quick Actions</span>
-            </div>
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <a href="{{ route('admin.comics') }}" class="btn btn-primary w-100">
-                        <i class="bi bi-book me-2"></i>Manage Comics
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="{{ route('admin.users') }}" class="btn btn-success w-100">
-                        <i class="bi bi-people me-2"></i>Manage Users
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="{{ route('admin.comics.create') }}" class="btn btn-warning w-100">
-                        <i class="bi bi-plus me-2"></i>Add New Comic
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <a href="{{ route('index') }}" class="btn btn-info w-100">
-                        <i class="bi bi-eye me-2"></i>View Site
-                    </a>
-                </div>
-            </div>
+    <div class="section-header">
+        <i class="bi bi-lightning-fill"></i>
+        <span>Quick Actions</span>
+    </div>
+    <div class="row g-3">
+        {{-- Tombol Manage Comics --}}
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ route('admin.comics') }}" class="btn btn-outline-primary w-100 h-100 p-3 d-flex flex-column justify-content-center align-items-center">
+                <i class="bi bi-book fs-2 mb-2"></i>
+                <span>Manage Comics</span>
+            </a>
         </div>
+        
+        {{-- Tombol Manage Users --}}
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ route('admin.users') }}" class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column justify-content-center align-items-center">
+                <i class="bi bi-people fs-2 mb-2"></i>
+                <span>Manage Users</span>
+            </a>
+        </div>
+        
+        {{-- Tombol Add New Comic --}}
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ route('admin.comics.create') }}" class="btn btn-outline-warning w-100 h-100 p-3 d-flex flex-column justify-content-center align-items-center">
+                <i class="bi bi-plus-circle fs-2 mb-2"></i>
+                <span>Add New Comic</span>
+            </a>
+        </div>
+        
+        {{-- Tombol View Site --}}
+        <div class="col-lg-3 col-md-6">
+            <a href="{{ route('index') }}" target="_blank" class="btn btn-outline-info w-100 h-100 p-3 d-flex flex-column justify-content-center align-items-center">
+                <i class="bi bi-eye fs-2 mb-2"></i>
+                <span>View Site</span>
+            </a>
+        </div>
+    </div>
+</div>
 
         <!-- Recent Comics -->
         <div class="section-container mb-4">
