@@ -536,11 +536,23 @@
         margin-bottom: 5px;
     }
 
-    .meta-value, .chapter-title {
+    .meta-value {
+    color: #fff;
+    font-weight: 500;
+}
+
+    .chapter-title {
         color: #fff;
         font-weight: 500;
+        margin-bottom: 0.25rem; /* Perbaikan kecil dari kode Anda sebelumnya */
+
+        /* UBAH UKURAN FONT DI SINI SESUAI KEINGINAN ANDA */
+        font-size: 1.1rem; /* Contoh: sedikit lebih besar dari standar */
     }
 
+    .chapter-link:hover .chapter-title {
+        color: var(--primary-color);
+    }
     .chapter-link {
         color: inherit;
     }
