@@ -20,13 +20,15 @@ protected $table = 'komiks';
 
 protected $fillable = [
         'judul',
+        'slug',
+        'language',
         'cover',
-        'genre',
         'author',
         'description',
         'status',
         'rating',
         'views'
+        
     ];
 
     protected $casts = [
@@ -96,7 +98,7 @@ protected $fillable = [
     }
     public function favoredByUsers()
     {
-        return $this->belongsToMany(User::class, 'komik_user', 'komik_fav_id', 'user_id');
+        return $this->belongsToMany(User::class, 'komik_user', 'komik_id', 'user_id');
     }
 
    public function comments()
@@ -107,7 +109,7 @@ protected $fillable = [
     {
         return $this->belongsToMany(
             Genre::class,           // Model yang dihubungkan
-            'komik_genre',          // Nama tabel pivot
+            'genre_komik',          // Nama tabel pivot
             'komik_id',             // Foreign key untuk model ini
             'genre_id'              // Foreign key untuk model Genre
         );
@@ -115,6 +117,14 @@ protected $fillable = [
     
     public function getLatestChapterAttribute()
     {
+        // Cek apakah relasi 'chapters' sudah dimuat ke memori (oleh with('chapters') di controller)
+        if ($this->relationLoaded('chapters')) {
+            // Jika ya, ambil nilai max dari koleksi yang sudah ada. Ini sangat cepat!
+            return $this->chapters->max('chapter_number') ?? 0;
+        }
+
+        // Jika relasi belum dimuat (sebagai fallback), jalankan query ke DB.
+        // Ini berguna jika Anda memanggil $komik->latest_chapter di tempat lain tanpa 'with()'.
         return $this->chapters()->max('chapter_number') ?? 0;
     }
 

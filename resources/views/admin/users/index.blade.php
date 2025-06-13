@@ -83,7 +83,6 @@
                                             {{-- Tombol Ban/Unban --}}
                                             <form action="{{ route('admin.users.updateStatus', $user->id) }}" method="POST" class="d-inline">
                                                 @csrf
-                                                @method('PATCH') {{-- Menggunakan PATCH sesuai kebutuhan aksi updateStatus --}}
 
                                                 @if ($user->is_banned)
                                                     <input type="hidden" name="is_banned" value="0"> {{-- Set is_banned ke false untuk unban --}}

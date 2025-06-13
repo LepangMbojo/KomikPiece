@@ -51,8 +51,8 @@
                             
                             <div class="col-md-6">
                                 <label for="title" class="form-label">Judul Chapter</label>
-                                <input type="text" class="form-control" id="title" name="title" 
-                                       value="{{ old('title') }}" placeholder="Opsional, misal: 'Awal Mula Petualangan'">
+                                <input type="text" class="form-control" id="chapter_title" name="chapter_title"
+                                       value="{{ old('chapter_title') }}" placeholder="Opsional, misal: 'Awal Mula Petualangan'">
                             </div>
                             
                             <div class="col-12">

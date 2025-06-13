@@ -2,23 +2,17 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
             <!-- Logo -->
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
+            <a class="navbar-brand" href="{{ route('index') }}">
                 <i class="bi bi-book me-2"></i>{{ config('app.name', 'KomikPiece') }}
             </a>
 
             <!-- Navigation Menu -->
             <div class="nav-menu d-flex align-items-center gap-3">
-                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a href="{{ route('index') }}" class="{{ request()->routeIs('index') ? '' : '' }}">
                     <i class="bi bi-house-door me-1"></i>Home
                 </a>
-                <a href="#" class="{{ request()->routeIs('genres') ? 'active' : '' }}">
+                <a href="{{route('genre.index')}}" class="{{ request()->routeIs('genre.index') ? 'active' : '' }}">
                     <i class="bi bi-grid me-1"></i>Genres
-                </a>
-                <a href="#" class="{{ request()->routeIs('latest') ? 'active' : '' }}">
-                    <i class="bi bi-clock me-1"></i>Latest
-                </a>
-                <a href="#" class="{{ request()->routeIs('popular') ? 'active' : '' }}">
-                    <i class="bi bi-fire me-1"></i>Popular
                 </a>
 
                 @auth
@@ -53,7 +47,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item text-white" href="#">
+                                <a class="dropdown-item text-white" href="{{ route('favorites.index') }}">
                                     <i class="bi bi-heart me-2"></i>Favorites
                                 </a>
                             </li>

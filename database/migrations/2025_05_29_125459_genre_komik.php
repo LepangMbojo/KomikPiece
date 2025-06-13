@@ -11,22 +11,24 @@ return new class extends Migration
      */
    public function up(): void
     {
-        Schema::create('komik_genre', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('komik_id'); // Sesuaikan dengan nama tabel komik Anda
-            $table->unsignedBigInteger('genre_id');
-            $table->timestamps();
-            
-            // Jika tabel komik Anda bernama 'komiks'
-            $table->foreign('komik_id')->references('id')->on('komiks')->onDelete('cascade');
-            $table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade');
-            
-            $table->unique(['komik_id', 'genre_id']);
+       Schema::create('genre_komik', function (Blueprint $table) {
+            // Foreign key untuk tabel 'genres'
+            $table->foreignId('genre_id')->constrained()->onDelete('cascade');
+
+            // Foreign key untuk tabel 'komiks' (atau apa pun nama tabel komik Anda)
+            $table->foreignId('komik_id')->constrained()->onDelete('cascade');
+
+            // Menetapkan composite primary key untuk mencegah duplikasi
+            // (satu komik tidak bisa memiliki genre yang sama lebih dari sekali)
+            $table->primary(['genre_id', 'komik_id']);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('komik_genre');
-    }   
+        Schema::dropIfExists('genre_komik');
+    }
 };

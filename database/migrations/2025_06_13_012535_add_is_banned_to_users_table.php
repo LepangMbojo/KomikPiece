@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_banned')->default(false)->after('role'); // Tambahkan setelah kolom 'role'
+            // Menambahkan kolom 'is_banned' dengan tipe boolean dan default false
+            $table->boolean('is_banned')->default(false)->after('password'); // Anda bisa menentukan posisi setelah kolom mana
         });
     }
 
@@ -22,6 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            // Menghapus kolom 'is_banned' jika migrasi di-rollback
             $table->dropColumn('is_banned');
         });
     }

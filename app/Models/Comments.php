@@ -7,9 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
 use App\Models\KomikIndex;
 
+
 class Comments extends Model
 {
     use HasFactory; // ✅ Tambahkan ini agar bisa gunakan factory
+
+ /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
 
    protected $fillable = [
         'user_id',
@@ -24,7 +31,7 @@ class Comments extends Model
 
     public function komik()
     {
-        return $this->belongsTo(Komik::class);
+        return $this->belongsTo(KomikIndex::class);
     }
     public function user()
     {
