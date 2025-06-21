@@ -38,10 +38,11 @@ class AdminController extends Controller
     public function comics()
     {
         $comics = Komik::withCount('chapters')->orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.comics.index', compact('comics'));
+        return view('admin.comics.index', compact('comics') );
     }
 
-    public function createComic()
+    // berfungsi sebagai form untuk pilihan tetap yang sudah ada
+    public function createComic() 
     {
         $genres = Genre::orderBy('name', 'asc')->get();
         
@@ -50,17 +51,19 @@ class AdminController extends Controller
         return view('admin.comics.create', compact('genres', 'languages'));
     }
 
+    
+
     public function storeComic(Request $request)
-{
+    {
     // 1. Validasi (Sudah bagus, hanya perlu memastikan 'genres.*' ada)
     $validatedData = $request->validate([
         'judul' => 'required|string|max:255|unique:komiks,judul',
-        'cover' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-        'description' => 'required|string|min:10',
-        'author' => 'required|string|max:255',
-        'status' => 'required|string',
+        'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+        'description' => 'nullable|string',
+        'author' => 'nullable|string|max:255',
+        'status' => 'nullable|string',
        'language' => 'required|string|max:50',         // <-- TAMBAHKAN VALIDASI
-        'rating' => 'nullable|numeric|min:0|max:10', // <-- TAMBAHKAN VALIDASI
+        'rating' => 'nullable|numeric|min:0|max:5', // <-- TAMBAHKAN VALIDASI
         'genres' => 'nullable|array', // Validasi bahwa 'genres' adalah array
         'genres.*' => 'exists:genres,id', // Validasi setiap ID genre ada di tabel genres
 
@@ -68,8 +71,8 @@ class AdminController extends Controller
         // Validasi chapter pertama
         'chapter_number' => 'required|numeric|min:0',
         'chapter_title' => 'nullable|string|max:255',
-        'chapter_pages' => 'required|array', // Pastikan chapter_pages adalah array
-        'chapter_pages.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
+        'chapter_pages' => 'nullable|array', // Pastikan chapter_pages adalah array
+        'chapter_pages.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
     ]);
 
     $coverPath = null;
@@ -85,16 +88,11 @@ class AdminController extends Controller
         $komik = Komik::create([
             'judul' => $validatedData['judul'],
             'cover' => $coverPath,
-            'slug' => Str::slug($validatedData['judul']),
             'description' => $validatedData['description'],
             'author' => $validatedData['author'],
             'status' => $validatedData['status'],
             'language' => $validatedData['language'],   // <-- TAMBAHKAN PENYIMPANAN
             'rating' => $validatedData['rating'] ?? 0, 
-            
-
-            // Hapus 'language', 'rating', 'chapter', 'Favorite' jika tidak ada di form/validasi
-            // atau berikan nilai default
             'views' => 0,
         ]);
 
@@ -166,9 +164,7 @@ class AdminController extends Controller
             'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'description' => 'required|string|min:10',
             'author' => 'required|string|max:255',
-            'status' => 'required|string',
-            'release_year' => 'required|integer|min:1900|max:' . date('Y'),
-            'language' => 'required|string|max:50',         // <-- TAMBAHKAN VALIDASI
+            'status' => 'required|string',      // <-- TAMBAHKAN VALIDASI
             'rating' => 'nullable|numeric|min:0|max:10',
             'genres' => 'nullable|array',
             'genres.*' => 'exists:genres,id'
@@ -180,8 +176,6 @@ class AdminController extends Controller
         // karena akan kita proses secara terpisah.
         $updateData = $request->except(['_token', '_method', 'cover', 'genres']);
         
-        // Tambahkan slug secara manual
-        $updateData['slug'] = Str::slug($request->judul);
 
 
         // 3. Update cover jika ada file baru (logika Anda sudah benar)

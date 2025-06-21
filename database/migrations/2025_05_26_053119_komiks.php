@@ -21,10 +21,7 @@ return new class extends Migration
             $table->string('language')->nullable();
             $table->text('description')->nullable();
             $table->string('author')->nullable();
-            $table->integer('Favorite')->default(0);
-            $table->string('slug')->unique()->nullable();
             $table->integer('views')->default(0);
-            $table->year('release_year')->nullable();
             $table->timestamps();
         });
     }
@@ -36,6 +33,5 @@ return new class extends Migration
     {
         $table->dropColumn('genre');
         Schema::dropIfExists('komiks');
-        $table->dropColumn(['slug', 'views', 'release_year']);
     }
 };

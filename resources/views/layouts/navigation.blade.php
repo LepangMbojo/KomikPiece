@@ -2,8 +2,13 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
             <!-- Logo -->
-            <a class="navbar-brand" href="{{ route('index') }}">
-                <i class="bi bi-book me-2"></i>{{ config('app.name', 'KomikPiece') }}
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('index') }}">
+                {{-- Menampilkan gambar logo dari folder public --}}
+                <img src="{{ asset('images/bts.png') }}" 
+                    alt="KomikPiece Logo" 
+                    class="navbar-logo me-2">
+
+                <span>{{ config('app.name', 'KomikPiece') }}</span>
             </a>
 
             <!-- Navigation Menu -->

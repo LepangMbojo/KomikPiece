@@ -55,13 +55,7 @@
                                                     value="{{ old('author') }}" required>
                                     </div>
                                     
-                                    <div class="col-md-6">
-                                        {{-- Added text-white to label --}}
-                                        <label for="release_year" class="form-label text-white">Tahun Rilis *</label>
-                                        {{-- Added bg-white and text-black to input --}}
-                                        <input type="number" class="form-control bg-white text-black" id="release_year" name="release_year" 
-                                                    min="1900" max="{{ date('Y') }}" value="{{ old('release_year', date('Y')) }}" required>
-                                    </div>
+                                   
                                     
                                     <div class="col-md-6">
                                         {{-- Added text-white to label --}}

@@ -614,12 +614,6 @@
         background: var(--primary-color);
     }
 
-    .comment-item:hover {
-        border-color: var(--primary-color);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(255, 87, 34, 0.1);
-        transition: all 0.3s ease;
-    }
 
     .form-control.bg-dark {
         color: #f8f9fa !important;
@@ -882,12 +876,6 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .chapter-title {
-            color: var(--primary-color);
-            font-size: 2rem;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
 
         .chapter-subtitle {
             color: #ffffff;
@@ -1003,4 +991,9 @@
             background: rgba(0, 0, 0, 0.8);
             z-index: 9998;
             display: none;
+        }
+
+        .navbar-logo {
+            height: 50px;
+            width: auto;
         }

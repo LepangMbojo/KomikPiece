@@ -20,7 +20,6 @@ protected $table = 'komiks';
 
 protected $fillable = [
         'judul',
-        'slug',
         'language',
         'cover',
         'author',

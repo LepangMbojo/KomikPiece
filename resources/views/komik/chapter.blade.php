@@ -1,132 +1,49 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
-            <h2 class="h4 mb-0">{{ $komik->judul }} - Chapter {{ $chapter->chapter_number }}</h2>
+            <h2 class="h4 mb-0">{{ $komik->judul }}</h2>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('komik.show', $komik->id) }}">{{ $komik->judul }}</a></li>
-                    <li class="breadcrumb-item active">Chapter {{ $chapter->chapter_number }}</li>
+                    <li class="breadcrumb-item">Chapter {{ $chapter->chapter_number }}</li>
                 </ol>
             </nav>
         </div>
     </x-slot>
 
-    <div class="container py-4">
-        <!-- Chapter Navigation -->
+      <div class="container py-4">
         <div class="chapter-navigation mb-4">
-            <div class="row">
-                <div class="col-md-4">
-                    @php
-                        $previousChapter = $komik->chapters()
-                            ->where('chapter_number', '<', $chapter->chapter_number)
-                            ->orderBy('chapter_number', 'desc')
-                            ->first();
-                    @endphp
+            <div class="d-flex justify-content-between align-items-center">
+                {{-- Tombol Previous --}}
+                <div>
                     @if($previousChapter)
-                        <a href="{{ route('komik.chapter', [$komik->id, $previousChapter->chapter_number]) }}" 
-                           class="btn btn-outline-light">
+                        <a href="{{ route('komik.chapter', [$komik->id, $previousChapter->chapter_number]) }}" class="btn btn-outline-light">
                             <i class="bi bi-chevron-left"></i> Previous
                         </a>
-                    @endif
-                </div>
-                <div class="col-md-4 text-center">
-                    <select class="form-select" onchange="changeChapter(this.value)">
-                        @if($komik->chapters && $komik->chapters->count() > 0)
-                            @foreach($komik->chapters->sortBy('chapter_number') as $ch)
-                                <option value="{{ $ch->chapter_number }}" 
-                                        {{ $ch->chapter_number == $chapter->chapter_number ? 'selected' : '' }}>
-                                    Chapter {{ $ch->chapter_number }}
-                                    @if($ch->title)
-                                        - {{ $ch->title }}
-                                    @endif
-                                </option>
-                            @endforeach
-                        @else
-                            <option value="{{ $chapter->chapter_number }}" selected>
-                                Chapter {{ $chapter->chapter_number }}
-                            </option>
-                        @endif
-                    </select>
-                </div>
-                <div class="col-md-4 text-end">
-                    @php
-                        $nextChapter = $komik->chapters()
-                            ->where('chapter_number', '>', $chapter->chapter_number)
-                            ->orderBy('chapter_number', 'asc')
-                            ->first();
-                    @endphp
-                    @if($nextChapter)
-                        <a href="{{ route('komik.chapter', [$komik->id, $nextChapter->chapter_number]) }}" 
-                           class="btn btn-outline-light">
-                            Next <i class="bi bi-chevron-right"></i>
-                        </a>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <!-- Chapter Content -->
-            <!-- Chapter Text Content (if any) -->
-            @if($chapter->content)
-                <div class="chapter-text mb-4">
-                    <div class="content-wrapper">
-                        {!! nl2br(e($chapter->content)) !!}
-                    </div>
-                </div>
-            @endif
-
-            <!-- Chapter Images -->
-            <div class="chapter-images">
-                {{-- Gunakan accessor pages_url dari model Chapter --}}
-                @if($chapter->pages_url && count($chapter->pages_url) > 0)
-                    @foreach($chapter->pages_url as $page_url)
-                        <div class="chapter-image mb-3 text-center">
-                            {{-- $page_url sudah berisi URL yang siap pakai atau URL placeholder dari accessor --}}
-                           <img src="{{ $page_url }}"
-                            alt="Page {{ $loop->iteration }}"
-                            class="img-fluid chapter-page"
-                            loading="lazy"
-                            onerror="..."
-                            oncontextmenu="return false;"> {{-- TAMBAHKAN INI --}}
-                            <div class="image-error" style="display: none;">
-                                <div class="alert alert-warning">
-                                    <i class="bi bi-exclamation-triangle"></i>
-                                    Image failed to load: Page {{ $loop->iteration }}
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="text-center py-5">
-                        <i class="bi bi-image display-1 text-muted"></i>
-                        <h5 class="mt-3 text-muted">No images available</h5>
-                        <p class="text-muted">This chapter doesn't have any images yet.</p>
-                    </div>
-                @endif
-            </div>
-        </div>
-
-        <!-- Chapter Navigation Bottom -->
-        <div class="chapter-navigation mt-4">
-            <div class="row">
-                <div class="col-md-6">
-                    @if(isset($previousChapter))
-                        <a href="{{ route('komik.chapter', [$komik->id, $previousChapter->chapter_number]) }}" 
-                           class="btn btn-primary">
-                            <i class="bi bi-chevron-left"></i> Previous Chapter
-                        </a>
                     @else
-                        <a href="{{ route('komik.show', $komik->id) }}" class="btn btn-outline-light">
+                         <a href="{{ route('komik.show', $komik->id) }}" class="btn btn-outline-light">
                             <i class="bi bi-arrow-left"></i> Back to Comic
                         </a>
                     @endif
                 </div>
-                <div class="col-md-6 text-end">
-                    @if(isset($nextChapter))
-                        <a href="{{ route('komik.chapter', [$komik->id, $nextChapter->chapter_number]) }}" 
-                           class="btn btn-primary">
-                            Next Chapter <i class="bi bi-chevron-right"></i>
+                {{-- Dropdown Pilihan Chapter --}}
+                <div class="text-center">
+                   <select class="form-select" onchange="changeChapter(this.value)">
+                        @foreach($komik->chapters->sortBy('chapter_number') as $ch)
+                            <option 
+                                value="{{   $ch->chapter_number }}"
+                                {{ $ch->id === $chapter->id ? 'selected' : '' }}>
+                                Chapter {{ $ch->chapter_number }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                {{-- Tombol Next --}}
+                <div>
+                     @if($nextChapter)
+                        <a href="{{ route('komik.chapter', [$komik->id, $nextChapter->chapter_number]) }}" class="btn btn-outline-light">
+                            Next <i class="bi bi-chevron-right"></i>
                         </a>
                     @else
                         <a href="{{ route('komik.show', $komik->id) }}" class="btn btn-outline-light">
@@ -136,6 +53,59 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- Chapter Content -->
+            <!-- Chapter Text Content (if any) -->
+             <div class="chapter-content">
+            <div class="chapter-images">
+                @forelse($chapter->pages_url as $page_url)
+                    <img src="{{ $page_url }}"
+                         alt="Page {{ $loop->iteration }}"
+                         class="img-fluid chapter-page"
+                         loading="lazy"
+                         oncontextmenu="return false;"
+                         ondragstart="return false;">
+                @empty
+                    <div class="text-center py-5">
+                        <i class="bi bi-image-alt display-1 text-muted"></i>
+                        <h5 class="mt-3 text-muted">No images available for this chapter.</h5>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+        
+        
+        <!-- Chapter Navigation Bottom -->
+        <div class="chapter-navigation mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    @if(isset($previousChapter))
+                    <a href="{{ route('komik.chapter', [$komik->id, $previousChapter->chapter_number]) }}" 
+                    class="btn btn-primary">
+                    <i class="bi bi-chevron-left"></i> Previous Chapter
+                </a>
+                @else
+                <a href="{{ route('komik.show', $komik->id) }}" class="btn btn-outline-light">
+                    <i class="bi bi-arrow-left"></i> Back to Comic
+                </a>
+                @endif
+            </div>
+            <div class="col-md-6 text-end">
+                @if(isset($nextChapter))
+                <a href="{{ route('komik.chapter', [$komik->id, $nextChapter->chapter_number]) }}" 
+                class="btn btn-primary">
+                Next Chapter <i class="bi bi-chevron-right"></i>
+            </a>
+            @else
+            <a href="{{ route('komik.show', $komik->id) }}" class="btn btn-outline-light">
+                Back to Comic <i class="bi bi-arrow-left"></i>
+            </a>
+            @endif
+        </div>
+    </div>
+</div>
+</div>
 
         <!-- Reading Progress -->
 

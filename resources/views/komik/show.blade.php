@@ -169,15 +169,6 @@
     @endforelse
 </div>
 
-            @if($komik->chapters->count() > 10)
-                <div class="text-center mt-4">
-                    <button class="btn btn-outline-light" onclick="loadMoreChapters()">
-                        <i class="bi bi-arrow-down me-2"></i>Load More Chapters
-                    </button>
-                </div>
-            @endif
-        </div>
-
     <div class="section-container">
         <div class="section-header">
             <i class="bi bi-chat-dots"></i>
@@ -221,13 +212,6 @@
                     <p class="text-muted">Be the first to leave a comment!</p>
                 </div>
             @endforelse
-            @if($komik->comments_count > $komik->comments->count())
-                <div class="text-center mt-4">
-                    <button class="btn btn-outline-light" id="loadMoreBtn" onclick="loadMoreComments()">
-                        <i class="bi bi-arrow-down me-2"></i>Load More Comments
-                    </button>
-                </div>
-            @endif
         </div>
     </div>
 </x-app-layout>
@@ -284,86 +268,7 @@
 });
 
 
-    function loadMoreComments() {
-        const btn = document.getElementById('loadMoreBtn');
-        const originalText = btn.innerHTML;
-
-        btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Loading...';
-        btn.disabled = true;
-
-        const comicId = {{ Js::from($komik->id) }};
-        const currentCount = document.querySelectorAll('.comment-item').length;
-
-        fetch(`/komik/${comicId}/comments/load-more?offset=${currentCount}`, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.comments && data.comments.length > 0) {
-                    const commentsList = document.querySelector('.comments-list');
-                    const loadMoreContainer = document.getElementById('loadMoreBtn') ? document.getElementById('loadMoreBtn').parentElement : null;
-
-
-                    data.comments.forEach(comment => {
-                        const commentHtml = `
-                            <div class="comment-item">
-                                <div class="d-flex">
-                                    <div class="comment-avatar me-3">
-                                        <div class="avatar-circle">
-                                            <i class="bi bi-person-circle fs-2 text-primary"></i>
-                                        </div>
-                                    </div>
-                                    <div class="comment-content flex-grow-1">
-                                        <div class="comment-header mb-2">
-                                            <strong class="comment-author">${comment.user.name}</strong>
-                                            <small class="text-white-50 ms-2">${comment.created_at}</small>
-                                        </div>
-                                        <div class="comment-text">${comment.content}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        if (loadMoreContainer) {
-                             loadMoreContainer.insertAdjacentHTML('beforebegin', commentHtml);
-                        } else {
-                            commentsList.insertAdjacentHTML('beforeend', commentHtml);
-                        }
-                    });
-
-                    if (data.comments.length < 10) {
-                        if (loadMoreContainer) loadMoreContainer.style.display = 'none';
-                    } else {
-                        if (btn) {
-                            btn.innerHTML = originalText;
-                            btn.disabled = false;
-                        }
-                    }
-                } else {
-                    if (btn && btn.parentElement) btn.parentElement.style.display = 'none';
-                }
-            })
-            .catch(error => {
-                console.error('Error loading comments:', error);
-                if (btn) {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }
-
-                const errorAlert = `
-                    <div class="alert alert-danger alert-dismissible fade show mt-3">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        Failed to load more comments. Please try again.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                `;
-                const targetElement = btn ? btn.parentElement : document.querySelector('.comments-list');
-                if (targetElement) targetElement.insertAdjacentHTML('afterend', errorAlert);
-            });
-    }
-
+   
     function toggleBookmark() {
         const btn = document.querySelector('#bookmark-text');
         const icon = btn.previousElementSibling;
