@@ -21,12 +21,12 @@
                 <span>Daftar Komik Favorit Anda</span>
             </h3>
 
-            {{-- Grid untuk menampilkan daftar komik favorit --}}
+           
          <div class="comic-grid" >
     @forelse($favoriteKomiks as $komik)
         <x-comic-card :komik="$komik" />
     @empty
-        {{-- Tampilan ini akan muncul jika tidak ada komik favorit --}}
+   
         <div class="empty-state">
             <p class="text-muted">Anda belum menambahkan komik ke favorit.</p>
         </div>

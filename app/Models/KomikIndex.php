@@ -63,28 +63,8 @@ protected $fillable = [
         return '/placeholder.svg?height=350&width=250&text=' . urlencode($this->judul);
     }
 
-    // Cek apakah cover exists
-    public function getCoverExistsAttribute()
-    {
-        if ($this->cover && Storage::disk('public')->exists($this->cover)) {
-            return true;
-        }
-        
-        $possibleCovers = [
-            'covers/' . $this->id . '.jpg',
-            'covers/' . $this->id . '.png',
-            'covers/' . $this->id . '.jpeg',
-        ];
-        
-        foreach ($possibleCovers as $coverPath) {
-            if (Storage::disk('public')->exists($coverPath)) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
 
+  
     // Relasi dengan chapters
     public function chapters()
     {

@@ -6,11 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\KomikIndex;
 use Illuminate\Support\Facades\Auth;
 
+
 class FavoriteController extends Controller
 {
    public function index()
     {
-        $favoriteKomiks = Auth::user()->favorites()->latest()->paginate(12);
+       $favoriteKomiks = Auth::user()->favorites()
+                                ->withMax('chapters', 'chapter_number') // <-- TAMBAHKAN INI
+                                ->orderBy('pivot_created_at', 'asc')
+                                ->paginate(12);
 
         return view('komik.Favorite', compact('favoriteKomiks'));
     }

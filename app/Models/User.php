@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function favorites()
     {
-        return $this->belongsToMany(KomikIndex::class, 'komik_user', 'user_id','komik_id' );
+        return $this->belongsToMany(KomikIndex::class, 'komik_user', 'user_id','komik_id' )  ->withTimestamps(); 
     }
 
     public function comments(): HasMany

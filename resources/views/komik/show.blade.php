@@ -18,9 +18,9 @@
                                 data-add-url="{{ route('favorites.add', $komik->id) }}"
                                 data-remove-url="{{ route('favorites.remove', $komik->id) }}">
                                 
-                                <i class="bi {{ $isFavorited ? 'bi-bookmark-fill' : 'bi-bookmark' }} me-2"></i>
+                                <i class="bi {{ $isFavorited ? 'bi-heart-fill' : 'bi-heart' }} me-2"></i>
                                 <span id="bookmark-text">
-                                    {{ $isFavorited ? 'Remove from Bookmark' : 'Add to Bookmark' }}
+                                    {{ $isFavorited ? 'Remove from Favorites' : 'Add to Favorites' }}
                                 </span>
                             </button>
                         @endauth
@@ -107,7 +107,7 @@
                             </div>
                             <div class="col-auto">
                                 <span class="badge bg-warning">
-                                    <i class="bi bi-bookmark me-1"></i>{{ $komik->favoredByUsers()->count() }} Bookmarks
+                                    <i class="bi bi-heart me-1"></i>{{ $komik->favoredByUsers()->count() }} Favorites
                                 </span>
                             </div>
                             <div class="col-auto">
