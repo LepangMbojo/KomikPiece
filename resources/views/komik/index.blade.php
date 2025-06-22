@@ -1,7 +1,6 @@
 <x-app-layout>
 
 
-
     <div class="container mt-4">
         <!-- Popular Now Section with Dark Background -->
         <div class="section-container section-spacing">

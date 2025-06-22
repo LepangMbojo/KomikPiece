@@ -110,7 +110,7 @@ public function index()
         return view('komik.chapter', compact('komik', 'chapter'));
     }
     
-    public function storeComment(Request $request, \App\Models\KomikIndex $komik)
+    public function storeComment(Request $request, KomikIndex $komik)
     {
     $request->validate([
         'content' => 'required|string|min:3|max:1000'

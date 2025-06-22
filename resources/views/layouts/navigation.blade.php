@@ -1,3 +1,4 @@
+
 <nav class="navbar-custom">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
@@ -12,24 +13,29 @@
             </a>
 
             <!-- Navigation Menu -->
-            <div class="nav-menu d-flex align-items-center gap-3">
-                <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" aria-current="page" href="{{ route('index') }}">
-                    <i class="bi bi-house-door me-1"></i>Home
-                </a>
-                <a href="{{route('genre.index')}}" class="{{ request()->routeIs('genre.index') ? 'active' : '' }}">
-                    <i class="bi bi-grid me-1"></i>Genres
-                </a>
-                <a class="nav-link {{ request()->routeIs('info.index') ? 'active' : '' }}" href="{{ route('info.index') }}">
-                    <i class="bi bi-info-circle me-1"></i>Tentang Kami
-                </a>
-                @auth
-                    @if(auth()->user()->isAdmin())
-                        <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.*') ? 'active' : '' }}">
-                            <i class="bi bi-shield-check me-1"></i>Admin Panel
-                        </a>
-                    @endif
-                @endauth
-            </div>
+           <div class="nav-menu d-flex align-items-center gap-3">
+
+    <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
+        <i class="bi bi-house-door me-1"></i>Home
+    </x-nav-link>
+
+    <x-nav-link :href="route('genre.index')" :active="request()->routeIs('genre.index')">
+        <i class="bi bi-grid me-1"></i>Genres
+    </x-nav-link>
+    
+    <x-nav-link :href="route('info.index')" :active="request()->routeIs('info.index')">
+            <i class="bi bi-info-circle me-1"></i>Tentang Kami
+        </x-nav-link> 
+
+    @auth
+        @if(auth()->user()->isAdmin())
+            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                <i class="bi bi-shield-check me-1"></i>Admin Panel
+            </x-nav-link>
+        @endif
+    @endauth
+
+</div>
 
             <!-- Right Side Menu -->
             <div class="right-menu d-flex align-items-center gap-2">
@@ -95,7 +101,6 @@
             </div>
         </div>
 
-        <!-- Search Bar -->
         <div id="searchBar" style="display: none; margin-top: 10px;">
             <form class="input-group" action="{{ route('komik.search') }}" method="GET">
                 <input type="text" class="form-control search-input" id="searchInput" name="q" placeholder="Search for comics..." value="{{ request('q') }}">

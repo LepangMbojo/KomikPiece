@@ -43,7 +43,6 @@ protected $fillable = [
         if ($this->cover) {
             return Storage::url($this->cover);
         }
-        
         // Jika tidak ada, coba cari file berdasarkan nama komik
         $possibleCovers = [
             'covers/' . $this->id . '.jpg',
@@ -52,19 +51,16 @@ protected $fillable = [
             'covers/' . str_replace(' ', '_', strtolower($this->judul)) . '.jpg',
             'covers/' . str_replace(' ', '_', strtolower($this->judul)) . '.png',
         ];
-        
         foreach ($possibleCovers as $coverPath) {
             if (Storage::disk('public')->exists($coverPath)) {
                 return Storage::url($coverPath);
             }
         }
-        
         // Fallback ke placeholder
         return '/placeholder.svg?height=350&width=250&text=' . urlencode($this->judul);
     }
 
 
-  
     // Relasi dengan chapters
     public function chapters()
     {

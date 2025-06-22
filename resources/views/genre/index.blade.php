@@ -30,36 +30,4 @@
         </div>
     </div>
 
-    <style>
-        .genre-card {
-            background-color: var(--card-bg);
-            border: 1px solid #444;
-            border-radius: 8px;
-            padding: 20px;
-            transition: all 0.3s;
-            height: 100%;
-        }
-
-        .genre-card:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-5px);
-        }
-
-        .genre-name {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        .genre-count {
-            color: #aaa;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .genre-description {
-            color: #ccc;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-    </style>
 </x-app-layout>
