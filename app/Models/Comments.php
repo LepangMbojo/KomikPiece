@@ -12,11 +12,7 @@ class Comments extends Model
 {
     use HasFactory; // ✅ Tambahkan ini agar bisa gunakan factory
 
- /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+
 
    protected $fillable = [
         'user_id',

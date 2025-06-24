@@ -12,24 +12,24 @@
         </div>
     </x-slot>
 
-      <div class="container py-4">
+    <div class="container py-4">
         <div class="chapter-navigation mb-4">
             <div class="d-flex justify-content-between align-items-center">
-                {{-- Tombol Previous --}}
+                
                 <div>
                     @if($previousChapter)
                         <a href="{{ route('komik.chapter', [$komik->id, $previousChapter->chapter_number]) }}" class="btn btn-outline-light">
                             <i class="bi bi-chevron-left"></i> Previous
                         </a>
                     @else
-                         <a href="{{ route('komik.show', $komik->id) }}" class="btn btn-outline-light">
+                        <a href="{{ route('komik.show', $komik->id) }}" class="btn btn-outline-light">
                             <i class="bi bi-arrow-left"></i> Back to Comic
                         </a>
                     @endif
                 </div>
-                {{-- Dropdown Pilihan Chapter --}}
+
                 <div class="text-center">
-                   <select class="form-select" onchange="changeChapter(this.value)">
+                <select class="form-select" onchange="changeChapter(this.value)">
                         @foreach($komik->chapters->sortBy('chapter_number') as $ch)
                             <option 
                                 value="{{   $ch->chapter_number }}"
@@ -39,7 +39,7 @@
                         @endforeach
                     </select>
                 </div>
-                {{-- Tombol Next --}}
+       
                 <div>
                      @if($nextChapter)
                         <a href="{{ route('komik.chapter', [$komik->id, $nextChapter->chapter_number]) }}" class="btn btn-outline-light">
@@ -54,18 +54,15 @@
             </div>
         </div>
 
-
-        <!-- Chapter Content -->
-            <!-- Chapter Text Content (if any) -->
-             <div class="chapter-content">
+            <div class="chapter-content">
             <div class="chapter-images">
                 @forelse($chapter->pages_url as $page_url)
                     <img src="{{ $page_url }}"
-                         alt="Page {{ $loop->iteration }}"
-                         class="img-fluid chapter-page"
-                         loading="lazy"
-                         oncontextmenu="return false;"
-                         ondragstart="return false;">
+                        alt="Page {{ $loop->iteration }}"
+                        class="img-fluid chapter-page"
+                        loading="lazy"
+                        oncontextmenu="return false;"
+                        ondragstart="return false;">
                 @empty
                     <div class="text-center py-5">
                         <i class="bi bi-image-alt display-1 text-muted"></i>
@@ -76,7 +73,7 @@
         </div>
         
         
-        <!-- Chapter Navigation Bottom -->
+        
         <div class="chapter-navigation mt-4">
             <div class="row">
                 <div class="col-md-6">
@@ -106,8 +103,6 @@
     </div>
 </div>
 </div>
-
-        <!-- Reading Progress -->
 
    <script>
     function changeChapter(chapterNumber) {

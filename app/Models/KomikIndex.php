@@ -39,11 +39,11 @@ protected $fillable = [
 
     public function getCoverImageAttribute()
     {
-        // Jika ada cover di database, gunakan itu
+        
         if ($this->cover) {
             return Storage::url($this->cover);
         }
-        // Jika tidak ada, coba cari file berdasarkan nama komik
+        
         $possibleCovers = [
             'covers/' . $this->id . '.jpg',
             'covers/' . $this->id . '.png',
@@ -56,12 +56,11 @@ protected $fillable = [
                 return Storage::url($coverPath);
             }
         }
-        // Fallback ke placeholder
+        
         return '/placeholder.svg?height=350&width=250&text=' . urlencode($this->judul);
     }
 
-
-    // Relasi dengan chapters
+    
     public function chapters()
     {
         return $this->hasMany(Chapter::class, 'komik_id');
@@ -76,14 +75,14 @@ protected $fillable = [
         return $this->belongsToMany(User::class, 'komik_user', 'komik_id', 'user_id');
     }
 
-   public function comments()
+public function comments()
 {
     return $this->hasMany(Comments::class, 'komik_id')->latest();
 }
-     public function genres()
+    public function genres()
     {
         return $this->belongsToMany(
-            Genre::class,           // Model yang dihubungkan
+            Genre::class,           
             'genre_komik',          // Nama tabel pivot
             'komik_id',             // Foreign key untuk model ini
             'genre_id'              // Foreign key untuk model Genre
@@ -92,14 +91,11 @@ protected $fillable = [
     
     public function getLatestChapterAttribute()
     {
-        // Cek apakah relasi 'chapters' sudah dimuat ke memori (oleh with('chapters') di controller)
+        
         if ($this->relationLoaded('chapters')) {
-            // Jika ya, ambil nilai max dari koleksi yang sudah ada. Ini sangat cepat!
+            
             return $this->chapters->max('chapter_number') ?? 0;
         }
-
-        // Jika relasi belum dimuat (sebagai fallback), jalankan query ke DB.
-        // Ini berguna jika Anda memanggil $komik->latest_chapter di tempat lain tanpa 'with()'.
         return $this->chapters()->max('chapter_number') ?? 0;
     }
 

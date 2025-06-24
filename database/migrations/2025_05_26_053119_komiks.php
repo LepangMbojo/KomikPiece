@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('judul');
             $table->string('cover')->nullable();
             $table->integer('rating')->nullable();
-            $table->integer('chapter')->nullable();
             $table->string('status')->nullable();
             $table->string('language')->nullable();
             $table->text('description')->nullable();

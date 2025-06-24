@@ -125,7 +125,7 @@
                         @forelse($recentComics as $comic)
                             <tr>
                                 <td>
-                                    <<img src="{{ Storage::url($comic->cover) }}" 
+                                    <img src="{{ Storage::url($comic->cover) }}" 
                                          alt="{{ $comic->judul }}" 
                                          style="width: 40px; height: 60px; object-fit: cover;">
                                 </td>
@@ -148,7 +148,6 @@
             </div>
         </div>
 
-        <!-- Recent Users -->
         <div class="section-container">
             <div class="section-header">
                 <i class="bi bi-people"></i>

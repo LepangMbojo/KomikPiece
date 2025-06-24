@@ -7,11 +7,11 @@
         <div class="section-container">
             <div class="section-header">
                 <i class="bi bi-tags"></i>
-                <span>Browse by Genre</span>
+                <span>pencarian</span>
             </div>
 
             <div class="row g-3">
-                @foreach($genres as $genre)
+                @foreach($jenis as $genre)
                     <div class="col-md-4 col-lg-3">
                         <div class="genre-card">
                             <a href="{{ route('comics.genre', $genre->slug) }}" class="text-decoration-none">

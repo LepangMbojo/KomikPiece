@@ -17,7 +17,7 @@ class CheckIfUserBanned
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && Auth::user()->is_banned) {
-            // Jika pengguna dibanned, logout mereka dan arahkan ke halaman login dengan pesan error
+
             Auth::logout();
 
             $request->session()->invalidate();

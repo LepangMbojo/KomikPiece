@@ -1,16 +1,12 @@
 <x-app-layout>
-
-
     <div class="container mt-4">
-        <!-- Popular Now Section with Dark Background -->
         <div class="section-container section-spacing">
             <div class="section-header">
                 <i class="bi bi-fire"></i>
                 Popular Now
             </div>
-
     <div class="comic-grid" id="popularGrid">
-       @forelse($popularKomiks as $komik)
+    @forelse($popularKomiks as $komik)
         <x-comic-card :komik="$komik" />
     @empty
         <div class="empty-state">
@@ -19,10 +15,6 @@
     @endforelse
         </div>
     </div>
-
-
-
-        <!-- New Uploads Section with Dark Background -->
         <div class="section-container">
             <div class="section-header">
                 <i class="bi bi-clock-history"></i>
@@ -41,7 +33,7 @@
     @endforelse
 </div>
 
-           
+
     <div class="d-flex justify-content-center mt-4">
         {{ $komiks->links() }}
     </div>

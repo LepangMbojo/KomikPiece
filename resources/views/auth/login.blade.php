@@ -49,6 +49,9 @@
                     Lupa password?
                 </a>
             @endif
+            <a class="small" href="{{route('index')}}">
+                kembali ke dashboard
+            </a>
 
             <button type="submit" class="btn btn-primary">
                 Login

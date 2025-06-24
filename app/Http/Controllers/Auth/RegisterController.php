@@ -31,11 +31,11 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        return view('auth.register'); // Pastikan fil   e register.blade.php ada
+        return view('auth.register'); 
     }
     public function showLoginForm()
     {
-        return view('auth.login'); // Pastikan file login.blade.php ada
+        return view('auth.login'); 
     }
 
 }

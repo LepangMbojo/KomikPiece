@@ -15,14 +15,6 @@ use Illuminate\Support\Facades\Storage;
 
 class KomikController extends Controller
 {
-    /**
-     * Method pribadi untuk mengambil komik populer.
-     * Hanya bisa diakses dari dalam controller ini.
-     *
-     * @param int $limit Jumlah komik yang ingin diambil
-     * @return \Illuminate\Support\Collection
-     */
-    
 public function index()
 {
     if (auth()->check()) {
@@ -43,7 +35,6 @@ public function index()
         ]);
 
     } else {
-        // --- LOGIKA UNTUK HALAMAN UTAMA PUBLIK (SUDAH BENAR) ---
         $komiks = KomikIndex::withMax('chapters', 'chapter_number')  ->latest()  ->paginate(10);
         
         $popularKomiks = $this->getPopularComics(5);

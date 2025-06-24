@@ -34,13 +34,12 @@ Route::get('/komik/{id}', [KomikController::class, 'show'])->name('komik.show');
 Route::get('/komik/{id}/chapter/{chapter}', [KomikController::class, 'showChapter'])->name('komik.chapter');
 
 // Rute untuk genre
-Route::get('/genres', [GenreController::class, 'index'])->name('genre.index');
+Route::get('/genres-film', [GenreController::class, 'index'])->name('genre.index');
 Route::get('/genre/{slug}', [GenreController::class, 'show'])->name('comics.genre');
 
 // Rute untuk halaman tentang
 Route::get('/about', [InfoController::class, 'index'])->name('info.index');
-// Rute untuk memuat lebih banyak komentar (jika menggunakan AJAX/fetch)
-Route::get('/komik/{komik}/comments/load-more', [CommentController::class, 'loadMore'])->name('komik.comments.load-more');
+
 
 
 // ===================================================================
@@ -48,8 +47,6 @@ Route::get('/komik/{komik}/comments/load-more', [CommentController::class, 'load
 // ===================================================================
 
 Route::middleware('auth')->group(function () {
-    // Dashboard untuk user biasa
-    Route::get('/dashboard', [KomikController::class, 'dashboard'])->middleware('verified')->name('dashboard');
 
     // Pengelolaan profil user
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -91,7 +88,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/upload', [AdminController::class, 'upload'])->name('komik.upload');
 
     // Manajemen User
-    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users', [AdminController::class, 'pengguna'])->name('users');
     Route::patch('/users/{id}/promote', [AdminController::class, 'promoteUser'])->name('users.promote');
     Route::patch('/users/{id}/demote', [AdminController::class, 'demoteAdmin'])->name('users.demote');
     Route::post('/users/{id}/update-status', [AdminController::class, 'updateUser'])->name('users.updateStatus');

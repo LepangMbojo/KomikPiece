@@ -55,7 +55,7 @@
                                                     value="{{ old('author') }}" required>
                                     </div>
                                     
-                                   
+                                
                                     
                                     <div class="col-md-6">
                                         {{-- Added text-white to label --}}
@@ -162,9 +162,9 @@
                                     </div>
                                     
                                     <div class="col-12">
-                                        {{-- Added text-white to label --}}
+                                       
                                         <label for="chapter_pages" class="form-label text-white">Halaman Chapter *</label>
-                                        {{-- Added bg-white and text-black to input --}}
+                                  
                                         <input type="file" class="form-control bg-white text-black" id="chapter_pages" name="chapter_pages[]" 
                                                     multiple accept="image/*" required>
                                         <div class="form-text">
@@ -186,9 +186,7 @@
                             </div>
                             <div class="card-body text-center">
                                 <div class="mb-3">
-                                    {{-- Added text-white to label --}}
                                     <label for="cover" class="form-label text-white">Upload Cover *</label>
-                                    {{-- Added bg-white and text-black to input --}}
                                     <input type="file" class="form-control bg-white text-black" id="cover" name="cover" 
                                                 accept="image/*" required>
                                     <div class="form-text">Format: JPG, PNG, GIF, WEBP. Max 5MB</div>
@@ -217,44 +215,7 @@
         </div>
     </div>
 
-    <style>
-        /* This style block should ideally be moved to a dedicated CSS file */
-        .preview-image {
-            max-width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        
-        .page-preview {
-            position: relative;
-            border: 2px solid #444;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .page-preview img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-        
-        .page-number {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-    </style>
+
 
     <script>
         // Cover preview

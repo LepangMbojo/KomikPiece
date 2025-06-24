@@ -1,5 +1,5 @@
 <x-app-layout>
-   <x-slot name="header">
+    <x-slot name="header">
     <x-page-header
         :title="$komik->judul"
         />
@@ -9,7 +9,7 @@
         <div class="section-container">
             <div class="row">
                 <div class="col-md-3 text-center mb-4">
-                   <img src="{{ $komik->cover_image }}" alt="{{ $komik->title }}" class="comic-cover img-fluid rounded shadow">
+                <img src="{{ $komik->cover_image }}" alt="{{ $komik->title }}" class="comic-cover img-fluid rounded shadow">
                     <div class="mt-3">
                         @auth
                             <button id="bookmark-btn" 
@@ -128,96 +128,90 @@
 
             </div>
 
-            <!-- PERBAIKI BAGIAN CHAPTERS LIST -->
-<div class="chapters-list" id="chaptersList">
-    @forelse($komik->chapters->sortByDesc('chapter_number') as $chapter)
-        <div class="chapter-item">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <!-- PASTIKAN LINK INI BENAR -->
-                    <a href="{{ route('komik.chapter', [$komik->id, $chapter->chapter_number]) }}" 
-                       class="chapter-link text-decoration-none">
-                        <h6 class="chapter-title mb-1">
-                            Chapter {{ $chapter->chapter_number }}
-                            @if($chapter->title)
-                                : {{ $chapter->title }}
-                            @endif
-                        </h6>
-                        <small class="text-muted">
-                            <i class="bi bi-calendar me-1"></i>{{ $chapter->created_at->format('M d, Y') }}
-                        </small>
-                    </a>
-                </div>
-                <div class="col-md-4 text-end">
-                    @if($chapter->is_new ?? false)
-                        <span class="badge bg-danger me-2">NEW</span>
-                    @endif
-                    <!-- PASTIKAN LINK INI JUGA BENAR -->
-                    <a href="{{ route('komik.chapter', [$komik->id, $chapter->chapter_number]) }}" 
-                       class="btn btn-primary btn-sm">
-                        <i class="bi bi-play-fill me-1"></i>Read
-                    </a>
-                </div>
-            </div>
-        </div>
-    @empty
-        <div class="text-center py-5">
-            <i class="bi bi-book display-1 text-muted"></i>
-            <h5 class="mt-3 text-muted">No chapters available yet</h5>
-            <p class="text-muted">Check back later for new chapters!</p>
-        </div>
-    @endforelse
-</div>
-
-    <div class="section-container">
-        <div class="section-header">
-            <i class="bi bi-chat-dots"></i>
-            <span>Comments ({{ $komik->comments->count() }})</span>
-        </div>
-
-        @auth
-            <div class="comment-form mb-4">
-                <form action="{{ route('komik.comments.store', $komik->id) }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <textarea class="form-control bg-dark text-white border-secondary @error('content') is-invalid @enderror" 
-                                    id="content" name="content" rows="3" 
-                                    placeholder="Share your thoughts about this comic..." 
-                                    required>{{ old('content') }}</textarea>
-                        @error('content')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+            <div class="chapters-list" id="chaptersList">
+                @forelse($komik->chapters->sortByDesc('chapter_number') as $chapter)
+                    <div class="chapter-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <a href="{{ route('komik.chapter', [$komik->id, $chapter->chapter_number]) }}" 
+                                class="chapter-link text-decoration-none">
+                                    <h6 class="chapter-title mb-1">
+                                        Chapter {{ $chapter->chapter_number }}
+                                        @if($chapter->title)
+                                            : {{ $chapter->title }}
+                                        @endif
+                                    </h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-calendar me-1"></i>{{ $chapter->created_at->format('M d, Y') }}
+                                    </small>
+                                </a>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <a href="{{ route('komik.chapter', [$komik->id, $chapter->chapter_number]) }}" 
+                                class="btn btn-primary btn-sm">
+                                    <i class="bi bi-play-fill me-1"></i>Read
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-send me-2"></i>Post Comment
-                        </button>
+                @empty
+                    <div class="text-center py-5">
+                        <i class="bi bi-book display-1 text-muted"></i>
+                        <h5 class="mt-3 text-muted">No chapters available yet</h5>
+                        <p class="text-muted">Check back later for new chapters!</p>
                     </div>
-                </form>
+                @endforelse
             </div>
-        @else
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle me-2"></i>
-                <a href="{{ route('login') }}" class="alert-link">Login</a> to post comments.
-            </div>
-        @endauth
 
-        <div class="comments-list">
-            @forelse($komik->comments as $comment)
-                @include('partials._comment_item', ['comment' => $comment])
-            @empty
-                <div class="text-center py-5">
-                    <i class="bi bi-chat-left-text display-1 text-muted"></i>
-                    <h5 class="mt-3 text-muted">No comments yet</h5>
-                    <p class="text-muted">Be the first to leave a comment!</p>
+                <div class="section-container">
+                    <div class="section-header">
+                        <i class="bi bi-chat-dots"></i>
+                        <span>Comments ({{ $komik->comments->count() }})</span>
+                    </div>
+
+                    @auth
+                        <div class="comment-form mb-4">
+                            <form action="{{ route('komik.comments.store', $komik->id) }}" method="POST">
+                                @csrf
+                                <div class="mb-3">
+                                    <textarea class="form-control bg-dark text-white border-secondary @error('content') is-invalid @enderror" 
+                                                id="content" name="content" rows="3" 
+                                                placeholder="Share your thoughts about this comic..." 
+                                                required>{{ old('content') }}</textarea>
+                                    @error('content')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-send me-2"></i>Post Comment
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    @else
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <a href="{{ route('login') }}" class="alert-link">Login</a> to post comments.
+                        </div>
+                    @endauth
+
+                    <div class="comments-list">
+                        @forelse($komik->comments as $comment)
+                            @include('partials._comment_item', ['comment' => $comment])
+                        @empty
+                            <div class="text-center py-5">
+                                <i class="bi bi-chat-left-text display-1 text-muted"></i>
+                                <h5 class="mt-3 text-muted">No comments yet</h5>
+                                <p class="text-muted">Be the first to leave a comment!</p>
+                            </div>
+                        @endforelse
+                    </div>
                 </div>
-            @endforelse
-        </div>
-    </div>
 </x-app-layout>
 
 <script>
-   document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('bookmark-btn');
     if (btn) {
         btn.addEventListener('click', async () => {
@@ -286,7 +280,6 @@
         if (navigator.share) {
             navigator.share({
                 title: '{{ $komik->title }}',
-                text: 'Check out this amazing komik!',
                 url: window.location.href
             });
         } else {
@@ -295,11 +288,5 @@
         }
     }
 
-    function sortChapters(order) {
-        console.log('Sorting chapters:', order);
-    }
 
-    function loadMoreChapters() {
-        console.log('Loading more chapters...');
-    }
 </script>

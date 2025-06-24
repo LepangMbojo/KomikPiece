@@ -25,7 +25,6 @@ class KomikIndexFactory extends Factory
             'judul' => fake()->sentence(3),
             'cover' => fake()->imageUrl(640, 480, 'komik', true),
             'rating' => fake()->numberBetween(1, 5),
-            'chapter' => fake()->numberBetween(1, 100),
             'status' => fake()->randomElement(['Ongoing', 'Completed']),
             'language' => fake()->randomElement(['English', 'Indonesian', 'Japanese']),
             'description' => fake()->paragraph(),

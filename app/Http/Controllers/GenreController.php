@@ -14,14 +14,9 @@ class GenreController extends Controller
      */
     public function index()
     {
-        // Mengambil semua genre, diurutkan berdasarkan nama.
-        // withCount('komiks') akan menambahkan properti 'komiks_count' 
-        // pada setiap genre, ini efisien untuk menampilkan jumlah komik per genre.
-        $genres = Genre::withCount('komiks')->orderBy('name', 'asc')->get();
+        $jenis = Genre::withCount('komiks')->orderBy('name', 'asc')->get();
 
-        // Mengembalikan view 'index' yang ada di folder 'genre'.
-        // Pastikan Anda memiliki file view di resources/views/genre/index.blade.php
-        return view('genre.index', compact('genres'));
+        return view('genre.home', compact('jenis'));
     }
 
     /**
@@ -32,7 +27,7 @@ class GenreController extends Controller
      */
     public function show($slug)
     {
-        // 1. Cari genre berdasarkan slug. Jika tidak ada, tampilkan halaman 404.
+
         $genre = Genre::where('slug', $slug)->firstOrFail();
 
         // 2. Ambil semua komik yang terhubung dengan genre ini, dengan paginasi.

@@ -33,17 +33,15 @@ class Chapter extends Model
         }
 
         return array_map(function($page) {
-            // Jika sudah full URL, return as is
+
             if (str_starts_with($page, 'http')) {
                 return $page;
             }
             
-            // Jika path relatif, convert ke storage URL
             if (Storage::disk('public')->exists($page)) {
                 return Storage::url($page);
             }
             
-            // Coba berbagai kemungkinan path
             $possiblePaths = [
                 'chapters/' . $this->komik_id . '/' . $this->chapter_number . '/' . basename($page),
                 'chapters/' . $page,
@@ -55,13 +53,10 @@ class Chapter extends Model
                     return Storage::url($path);
                 }
             }
-            
-            // Fallback ke placeholder
             return '/placeholder.svg?height=800&width=600&text=Page+' . (array_search($page, $this->pages) + 1);
         }, $this->pages);
     }
 
-    // Relasi dengan komik
     public function komik()
     {
         return $this->belongsTo(Komik::class, 'komik_id');

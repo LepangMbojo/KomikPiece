@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class Genre extends Model
 {
-    /** @use HasFactory<\Database\Factories\GenreFactory> */
+
     use HasFactory;
 
     protected $table = 'genres';
@@ -23,9 +23,7 @@ class Genre extends Model
         return $this->belongsToMany(KomikIndex::class, 'genre_komik', 'genre_id', 'komik_id');
     }
 
-    /**
-     * Boot the model.
-     */
+
     protected static function boot()
     {
         parent::boot();
@@ -37,8 +35,5 @@ class Genre extends Model
         });
     }
 
-    /**
-     * Get the komiks for the genre.
-     */
-    
+
 }

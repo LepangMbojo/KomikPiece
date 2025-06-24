@@ -57,7 +57,7 @@
                             
                             <div class="col-12">
                                 <label for="chapter_pages" class="form-label">Halaman Chapter *</label>
-                                {{-- Nama input adalah 'chapter_pages[]' untuk multiple file upload --}}
+                          
                                 <input type="file" class="form-control" id="chapter_pages" name="chapter_pages[]" 
                                        multiple accept="image/*" required>
                                 <div class="form-text">
@@ -83,36 +83,6 @@
         </div>
     </div>
 
-    <style>
-        .page-preview {
-            position: relative;
-            border: 2px solid #444;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .page-preview img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-        
-        .page-number {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-        
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-    </style>
 
     <script>
         // Script untuk preview halaman chapter (sama seperti di form create)

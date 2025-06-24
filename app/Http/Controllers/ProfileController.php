@@ -47,12 +47,8 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Hapus akun pengguna.
-     */
     public function destroy(Request $request): RedirectResponse
     {
-        // ... (method ini tidak perlu diubah)
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);

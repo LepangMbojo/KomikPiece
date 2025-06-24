@@ -28,10 +28,10 @@
                 </div>
             @endif
 
-            {{-- Form mengarah ke route 'update' dengan method 'PUT' --}}
+            
             <form action="{{ route('admin.comics.update', $komik->id) }}" method="POST" enctype="multipart/form-data" id="comicForm">
                 @csrf
-                @method('PUT') {{-- Method Spoofing untuk update --}}
+                @method('PUT') 
                 
                 <div class="row">
                     <div class="col-md-8">
@@ -41,19 +41,19 @@
                             </div>
                             <div class="card-body">
                                 <div class="row g-3">
-                                    {{-- Semua input diisi dengan data yang ada: old('nama_field', $komik->nama_field) --}}
+                                    
                                     <div class="col-12">
-                                        {{-- Added text-white to label --}}
+                                        
                                         <label for="judul" class="form-label text-white">Judul Komik *</label>
-                                        {{-- Added bg-white and text-black to input --}}
+                                        
                                         <input type="text" class="form-control bg-white text-black" id="judul" name="judul" 
                                                     value="{{ old('judul', $komik->judul) }}" required>
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        {{-- Added text-white to label --}}
+                                        
                                         <label for="author" class="form-label text-white">Author *</label>
-                                        {{-- Added bg-white and text-black to input --}}
+                                        
                                         <input type="text" class="form-control bg-white text-black" id="author" name="author" 
                                                     value="{{ old('author', $komik->author) }}" required>
                                     </div>
@@ -61,9 +61,9 @@
         
                                     
                                     <div class="col-md-6">
-                                        {{-- Added text-white to label --}}
+                                        
                                         <label for="status" class="form-label text-white">Status *</label>
-                                        {{-- Added bg-white and text-black to select --}}
+                                        
                                         <select class="form-control bg-white text-black" id="status" name="status" required>
                                             <option value="">Pilih Status</option>
                                             <option value="ongoing" {{ old('status', $komik->status) == 'ongoing' ? 'selected' : '' }}>Ongoing</option>
@@ -73,17 +73,17 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        {{-- Added text-white to label --}}
+                                        
                                         <label for="rating" class="form-label text-white">Rating</label>
-                                        {{-- Added bg-white and text-black to input --}}
+                                        
                                         <input type="number" class="form-control bg-white text-black" id="rating" name="rating" 
                                                     step="0.1" min="0" max="10" value="{{ old('rating', $komik->rating) }}">
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        {{-- Added text-white to label --}}
+                                        
                                         <label for="language" class="form-label text-white">Bahasa *</label>
-                                        {{-- Added bg-white and text-black to select --}}
+                                        
                                         <select class="form-control bg-white text-black" id="language" name="language" required>
                                             <option value="">Pilih Bahasa</option>
                                             @foreach($languages as $language)
@@ -185,21 +185,6 @@
         </div>
     </div>
 
-    <style>
-        .preview-image {
-            max-width: 100%;
-            max-height: 400px; /* Disesuaikan agar lebih besar */
-            object-fit: contain; /* Gunakan contain agar gambar utuh */
-            border-radius: 8px;
-            background-color: #1a1a1a;
-        }
-        
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-    </style>
-
     <script>
         // Cover preview (logikanya sama, akan menggantikan preview yang ada)
         document.getElementById('cover').addEventListener('change', function(e) {
@@ -220,7 +205,7 @@
             }
         });
 
-        // Form submission with loading state (disederhanakan untuk form edit)
+        
         document.getElementById('comicForm').addEventListener('submit', function(e) {
             const submitBtn = document.getElementById('submitBtn');
             const form = this;
@@ -230,7 +215,7 @@
             form.classList.add('loading');
             
             const cover = document.getElementById('cover').files[0];
-            if (cover && cover.size > 5 * 1024 * 1024) { // 5MB
+            if (cover && cover.size > 5 * 1024 * 1024) {
                 e.preventDefault();
                 alert('Ukuran cover terlalu besar! Maksimal 5MB.');
                 submitBtn.innerHTML = '<i class="bi bi-save me-2"></i>Simpan Perubahan';

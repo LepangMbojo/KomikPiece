@@ -33,7 +33,6 @@
         @endif
 
         <div class="row">
-            {{-- KOLOM KIRI: INFO SINGKAT & COVER --}}
             <div class="col-md-4">
                 <div class="card mb-4">
                     <img src="{{ $komik->cover_image }}" class="card-img-top" alt="Cover {{ $komik->judul }}" style="object-fit: cover; height: 400px; background-color: #1a1a1a;">
@@ -62,7 +61,6 @@
                 </div>
             </div>
 
-            {{-- KOLOM KANAN: DESKRIPSI & MANAJEMEN CHAPTER --}}
             <div class="col-md-8">
                 <div class="section-container">
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -87,16 +85,15 @@
                                 @forelse ($komik->chapters->sortByDesc('chapter_number') as $chapter)
                                     <tr>
                                         <th scope="row">{{ $chapter->chapter_number }}</th>
-                                        {{-- PERBAIKI DI SINI: UBAH $chapter->chapter_title MENJADI $chapter->title --}}
                                         <td>{{ $chapter->title ?: '-' }}</td> 
                                         <td>{{ count($chapter->pages) }}</td>
                                         <td>{{ $chapter->created_at->format('d M Y') }}</td>
                                         <td class="text-end">
-                                            {{-- Tombol Lihat Chapter (di halaman publik) --}}
+                              
                                             <a href="{{ route('komik.chapter', ['id' => $komik->id, 'chapter' => $chapter->chapter_number]) }}" class="btn btn-sm btn-info" title="Lihat Chapter" target="_blank">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            {{-- Tombol Hapus Chapter --}}
+                            
                                             <form action="{{ route('admin.comics.chapters.delete', ['comicId' => $komik->id, 'chapterId' => $chapter->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Anda yakin ingin menghapus Chapter {{ $chapter->chapter_number }} secara permanen?');">
                                                 @csrf
                                                 @method('DELETE')

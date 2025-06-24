@@ -36,7 +36,6 @@
                 @endforelse
             </div>
 
-            <!-- Pagination -->
             @if($komiks->hasPages())
                 <div class="d-flex justify-content-center mt-4">
                     {{ $komiks->appends(['q' => $query])->links() }}
