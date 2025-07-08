@@ -164,7 +164,7 @@
                                     <div class="col-12">
                                        
                                         <label for="chapter_pages" class="form-label text-white">Halaman Chapter *</label>
-                                  
+                                
                                         <input type="file" class="form-control bg-white text-black" id="chapter_pages" name="chapter_pages[]" 
                                                     multiple accept="image/*" required>
                                         <div class="form-text">

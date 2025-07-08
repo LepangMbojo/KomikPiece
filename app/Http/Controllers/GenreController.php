@@ -30,11 +30,10 @@ class GenreController extends Controller
 
         $genre = Genre::where('slug', $slug)->firstOrFail();
 
-        // 2. Ambil semua komik yang terhubung dengan genre ini, dengan paginasi.
-        $komiks = $genre->komiks()->latest()->paginate(12); // Menampilkan 12 komik per halaman
+        
+        $komiks = $genre->komiks()->latest()->paginate(5); 
 
-        // 3. Tampilkan view dan kirim data genre beserta daftar komiknya.
-        // Pastikan Anda memiliki file view di resources/views/genre/show.blade.php
+        
         return view('genre.show', compact('genre', 'komiks'));
     }
 }
