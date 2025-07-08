@@ -38,4 +38,7 @@
 
 ### 4. Migrasi dan seed
 - php artisan migrate:fresh --seed
-
+- php artisan storage:link
+  
+### 5. Jalankan
+- php artisan serve
